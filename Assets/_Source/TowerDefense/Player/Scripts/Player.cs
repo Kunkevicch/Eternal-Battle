@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace EndlessRoad
+namespace EndlessRoad.Shooter
 {
     public class Player : MonoBehaviour
     {
-
+        
     }
 }
