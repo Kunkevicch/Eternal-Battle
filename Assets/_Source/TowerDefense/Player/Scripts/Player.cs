@@ -4,6 +4,5 @@ namespace EndlessRoad.Shooter
 {
     public class Player : MonoBehaviour
     {
-        
     }
 }
