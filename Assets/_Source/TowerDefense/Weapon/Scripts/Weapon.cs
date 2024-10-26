@@ -13,6 +13,7 @@ namespace EndlessRoad
         [SerializeField] private int _damage;
         [SerializeField] private float _ammoDistance;
         [SerializeField] private Transform _fpsCamera;
+        [SerializeField] private WeaponConfig _gun;
 
         private int _currentAmmo;
         private int _currentAmmoClip;
@@ -28,6 +29,11 @@ namespace EndlessRoad
         private void Construct(ImpactService impactService)
         {
             _impactService = impactService;
+        }
+
+        private void Start()
+        {
+            //_gun.Spawn(transform, this);
         }
 
         public event Action WeaponReloaded;
@@ -49,18 +55,19 @@ namespace EndlessRoad
 
         public void Fire()
         {
-            var direction = GetSpreadPoint();
-            if (Physics.Raycast(_shootPoint.position, direction, out _rayHit, _ammoDistance, _impactLayer))
-            {
-                if (_rayHit.collider.TryGetComponent(out IImpactable impactable))
-                {
-                    _impactService.DoImpactToTargetPoint(impactable, _rayHit.point);
-                    if (impactable is IDamageable damageable)
-                    {
-                        damageable.ApplyDamage(_damage);
-                    }
-                }
-            }
+            _gun.Shoot();
+            //var direction = GetSpreadPoint();
+            //if (Physics.Raycast(_shootPoint.position, direction, out _rayHit, _ammoDistance, _impactLayer))
+            //{
+            //    if (_rayHit.collider.TryGetComponent(out IImpactable impactable))
+            //    {
+            //        _impactService.DoImpactToTargetPoint(impactable, _rayHit.point);
+            //        if (impactable is IDamageable damageable)
+            //        {
+            //            damageable.ApplyDamage(_damage);
+            //        }
+            //    }
+            //}
         }
 
         private Vector3 GetSpreadPoint()

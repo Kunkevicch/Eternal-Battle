@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Zenject;
@@ -10,27 +9,31 @@ namespace EndlessRoad.Shooter
         [SerializeField] private float _jumpHeight;
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float smoothTime = 0.05f;
-        [SerializeField] Weapon _weapon;
+        [SerializeField] WeaponConfig _weapon;
         [SerializeField] private Transform _camera;
         private bool _isShooting;
 
+
         private CharacterController _controller;
         private PlayerInput _playerInput;
-
+        private WeaponView _weaponView;
         private Vector2 _inputRotation;
         private float _pitch;
-        private Vector3 _prevValue;
         private Vector3 _playerVelocity;
         private bool _isGrounded;
         private bool _isRotating;
 
         private ObjectPool _test;
+        private ImpactService _impactService;
 
         [Inject]
-        private void Construct(ObjectPool objectPool)
+        private void Construct(ObjectPool objectPool, ImpactService impactService)
         {
             _test = objectPool;
+            _impactService = impactService;
         }
+
+        private Vector2 MoveDirection => _playerInput.Player.Move.ReadValue<Vector2>();
 
         private void Awake()
         {
@@ -39,35 +42,53 @@ namespace EndlessRoad.Shooter
             _playerInput = new();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            _weaponView = _weapon.Spawn(_camera.transform, this, _test, _impactService);
         }
 
         private void OnEnable()
         {
             _playerInput.Enable();
+
+            _playerInput.Player.Move.started += ctx => _weaponView.SetShootMove(true);
+            _playerInput.Player.Move.canceled += ctx => _weaponView.SetShootMove(false);
+
             _playerInput.Player.Jump.started += OnJump;
 
             _playerInput.Player.Rotation.started += ctx => { _inputRotation = ctx.ReadValue<Vector2>(); _isRotating = true; };
             _playerInput.Player.Rotation.canceled += ctx => _isRotating = false;
 
-            _playerInput.Player.Fire.started += OnStartShoot;
+            _playerInput.Player.Fire.started += ctx => _isShooting = true;
             _playerInput.Player.Fire.canceled += ctx => _isShooting = false;
         }
 
         private void OnDisable()
         {
             _playerInput.Disable();
+
+            _playerInput.Player.Move.started -= ctx => _weaponView.SetShootMove(true);
+            _playerInput.Player.Move.canceled -= ctx => _weaponView.SetShootMove(false);
+
             _playerInput.Player.Jump.started -= OnJump;
             _playerInput.Player.Rotation.started -= ctx => { _inputRotation = ctx.ReadValue<Vector2>(); _isRotating = true; };
             _playerInput.Player.Rotation.canceled -= ctx => _isRotating = false;
 
-            _playerInput.Player.Fire.performed -= ctx => _weapon.Fire();
-            _playerInput.Player.Fire.canceled -= ctx => _weapon.Fire();
+            _playerInput.Player.Fire.started -= ctx => _isShooting = true;
+            _playerInput.Player.Fire.canceled -= ctx => _isShooting = false;
+        }
+
+
+        private void Update()
+        {
+            if (_isShooting)
+            {
+                _weaponView.Shoot();
+            }
         }
 
         private void FixedUpdate()
         {
             _isGrounded = IsGrounded();
-            Move(_playerInput.Player.Move.ReadValue<Vector2>());
+            Move(MoveDirection);
         }
 
         private void LateUpdate()
@@ -99,7 +120,6 @@ namespace EndlessRoad.Shooter
         {
             float mouseX = direction.x;
             float mouseY = direction.y;
-            _prevValue = _camera.transform.localEulerAngles;
             _pitch -= mouseY * Time.deltaTime;
             _pitch = Mathf.Clamp(_pitch, -80f, 80f);
             _camera.transform.eulerAngles = new Vector3(_pitch * 2f, _camera.transform.localEulerAngles.y, 0f);
@@ -125,8 +145,8 @@ namespace EndlessRoad.Shooter
 
             while (_isShooting)
             {
-                _weapon.Fire(); // выполняем выстрел
-                yield return new WaitForSeconds(_weapon.FireRate); // ждём время между выстрелами
+                _weapon.Shoot(); // выполняем выстрел
+                yield return null;// ждём время между выстрелами
             }
         }
 

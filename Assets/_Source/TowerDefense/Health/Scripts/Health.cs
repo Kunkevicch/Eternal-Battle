@@ -32,7 +32,6 @@ namespace EndlessRoad
         {
             if (damage < 0)
                 return;
-
             CurrentHealth -= damage;
             Dead?.Invoke();
         }

@@ -21,3 +21,7 @@ MonoBehaviour:
     prefab: {fileID: 167524, guid: fdac75e990da47649b31f10049c400b0, type: 3}
     componentType: EndlessRoad.ImpactEffect
     isInjected: 0
+  - poolSize: 200
+    prefab: {fileID: 4693748452550200577, guid: 51b1097e73ee32f4fa405bc684eed3be, type: 3}
+    componentType: EndlessRoad.ShootTrail
+    isInjected: 0

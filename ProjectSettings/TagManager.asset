@@ -15,25 +15,25 @@ TagManager:
   - UI
   - Ground
   - Enemy
-  - PostProcessingVolumes
-  - EnvironmentRough
-  - EnvironmentDetail
-  - MovingPlatforms
-  - DynamicProps
-  - CharacterControllers
-  - CharacterFirstPerson
-  - CharacterExternal
-  - CharacterPhysics
-  - CharacterRagdoll
-  - CharacterNonColliding
-  - WieldablesFirstPerson
-  - WieldablesExternal
-  - TriggerZones
-  - InteractiveObjects
-  - Doors
-  - SmallDynamicObjects
-  - Effects
-  - AiVisibility
+  - Obstacle
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
