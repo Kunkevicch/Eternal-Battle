@@ -16,5 +16,14 @@ public class ShooterGameInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<ImpactService>()
             .AsSingle()
             .NonLazy();
+
+        Container.BindInterfacesAndSelfTo<EventBus>()
+            .AsSingle()
+            .NonLazy();
+
+        Container.BindInterfacesAndSelfTo<WeaponHolder>()
+            .FromComponentInHierarchy()
+            .AsSingle()
+            .NonLazy();
     }
 }

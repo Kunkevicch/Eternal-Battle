@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace EndlessRoad.Shooter
 {
@@ -8,95 +11,94 @@ namespace EndlessRoad.Shooter
     {
         [SerializeField] private float _jumpHeight;
         [SerializeField] private float _moveSpeed;
-        [SerializeField] private float smoothTime = 0.05f;
-        [SerializeField] WeaponConfig _weapon;
-        [SerializeField] private Transform _camera;
-        private bool _isShooting;
+        [SerializeField] private CinemachineCamera _camera;
+        [SerializeField] private PlayerWeaponHolderConfig _weaponHolderConfig;
 
+        private WeaponHolder _weaponHolder;
+
+        private bool _isAim;
+        private bool _isShooting;
+        private bool _isGrounded;
 
         private CharacterController _controller;
         private PlayerInput _playerInput;
-        private WeaponView _weaponView;
-        private Vector2 _inputRotation;
-        private float _pitch;
         private Vector3 _playerVelocity;
-        private bool _isGrounded;
-        private bool _isRotating;
 
-        private ObjectPool _test;
-        private ImpactService _impactService;
+        private ObjectPool _test; // TODO: Перенести обжект пул либо в gamecontroller, либо 
 
         [Inject]
-        private void Construct(ObjectPool objectPool, ImpactService impactService)
+        public void Construct(ObjectPool objectPool)
         {
             _test = objectPool;
-            _impactService = impactService;
         }
 
         private Vector2 MoveDirection => _playerInput.Player.Move.ReadValue<Vector2>();
+        private Vector2 lookDirection => _playerInput.Player.Rotation.ReadValue<Vector2>();
+        private WeaponView ActiveWeapon => _weaponHolder.ActiveWeapon;
 
         private void Awake()
         {
             _test.Initialize();
             _controller = GetComponent<CharacterController>();
+            _weaponHolder = _camera.GetComponentInChildren<WeaponHolder>();
             _playerInput = new();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            _weaponView = _weapon.Spawn(_camera.transform, this, _test, _impactService);
+        }
+
+        private void Start()
+        {
+            _weaponHolderConfig.SpawnWeaponInHolder(_weaponHolder, _test);
         }
 
         private void OnEnable()
         {
             _playerInput.Enable();
 
-            _playerInput.Player.Move.started += ctx => _weaponView.SetShootMove(true);
-            _playerInput.Player.Move.canceled += ctx => _weaponView.SetShootMove(false);
+            _playerInput.Player.Move.started += ctx => ActiveWeapon.SetShootMove(true);
+            _playerInput.Player.Move.canceled += ctx => ActiveWeapon.SetShootMove(false);
 
             _playerInput.Player.Jump.started += OnJump;
 
-            _playerInput.Player.Rotation.started += ctx => { _inputRotation = ctx.ReadValue<Vector2>(); _isRotating = true; };
-            _playerInput.Player.Rotation.canceled += ctx => _isRotating = false;
-
             _playerInput.Player.Fire.started += ctx => _isShooting = true;
             _playerInput.Player.Fire.canceled += ctx => _isShooting = false;
+
+            _playerInput.Player.Aim.started += OnAim;
+
+            _playerInput.Player.ChangeWeapon.started += OnChangeWeapon;
+
+            _playerInput.Player.Reload.started += ctx => ActiveWeapon.StartReload();
         }
 
         private void OnDisable()
         {
             _playerInput.Disable();
 
-            _playerInput.Player.Move.started -= ctx => _weaponView.SetShootMove(true);
-            _playerInput.Player.Move.canceled -= ctx => _weaponView.SetShootMove(false);
+            _playerInput.Player.Move.started -= ctx => _weaponHolder.ActiveWeapon.SetShootMove(true);
+            _playerInput.Player.Move.canceled -= ctx => _weaponHolder.ActiveWeapon.SetShootMove(false);
 
             _playerInput.Player.Jump.started -= OnJump;
-            _playerInput.Player.Rotation.started -= ctx => { _inputRotation = ctx.ReadValue<Vector2>(); _isRotating = true; };
-            _playerInput.Player.Rotation.canceled -= ctx => _isRotating = false;
 
             _playerInput.Player.Fire.started -= ctx => _isShooting = true;
             _playerInput.Player.Fire.canceled -= ctx => _isShooting = false;
-        }
 
+            _playerInput.Player.Aim.started -= OnAim;
+
+            _playerInput.Player.ChangeWeapon.started -= OnChangeWeapon;
+
+            _playerInput.Player.Reload.started -= ctx => ActiveWeapon.StartReload();
+        }
 
         private void Update()
         {
-            if (_isShooting)
-            {
-                _weaponView.Shoot();
-            }
+            _weaponHolder.Sway(lookDirection.x, lookDirection.y);
+            _weaponHolder.Shoot(_isShooting);
         }
 
         private void FixedUpdate()
         {
             _isGrounded = IsGrounded();
             Move(MoveDirection);
-        }
-
-        private void LateUpdate()
-        {
-            if (_isRotating)
-            {
-                LookAtDirection(_inputRotation.normalized);
-            }
         }
 
         private void Move(Vector2 input)
@@ -111,20 +113,10 @@ namespace EndlessRoad.Shooter
                 _playerVelocity.y = -2f;
             }
 
-            _controller.Move(_playerVelocity * Time.deltaTime);
+            _controller.Move(_playerVelocity * Time.fixedDeltaTime);
         }
 
         private bool IsGrounded() => _controller.isGrounded;
-
-        private void LookAtDirection(Vector2 direction)
-        {
-            float mouseX = direction.x;
-            float mouseY = direction.y;
-            _pitch -= mouseY * Time.deltaTime;
-            _pitch = Mathf.Clamp(_pitch, -80f, 80f);
-            _camera.transform.eulerAngles = new Vector3(_pitch * 2f, _camera.transform.localEulerAngles.y, 0f);
-            transform.Rotate(Vector3.up, mouseX * Time.deltaTime * 2f);
-        }
 
         private void OnJump(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
@@ -133,22 +125,52 @@ namespace EndlessRoad.Shooter
             _playerVelocity.y = Mathf.Sqrt(_jumpHeight * -3f * Physics.gravity.y);
         }
 
-
-        private void OnStartShoot(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void OnChangeWeapon(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
-            StartCoroutine(ShootRoutine());
+            if (_isAim || _isShooting)
+                return;
+
+            _weaponHolder.SetWeapon(context.ReadValue<float>() < 0 ? SetWeaponDirection.Previous : SetWeaponDirection.Next);
         }
 
-        private IEnumerator ShootRoutine()
+        private void OnAim(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
-            _isShooting = true;
-
-            while (_isShooting)
+            _isAim = !_isAim;
+            if (_isAim)
             {
-                _weapon.Shoot(); // выполняем выстрел
-                yield return null;// ждём время между выстрелами
+                _camera.Lens.FieldOfView = 30f;
+            }
+            else
+            {
+                _camera.Lens.FieldOfView = 60f;
+            }
+            StopCoroutine(AimRoutine());
+            StartCoroutine(AimRoutine());
+            _weaponHolder.Aim(_isAim);
+        }
+
+        private IEnumerator AimRoutine()
+        {
+            float startTime = Time.time;
+            float t = 0;
+            if (_isAim)
+            {
+                while (t < 1f)
+                {
+                    t = (Time.time - startTime) / 0.2f;
+                    _camera.Lens.FieldOfView = Mathf.Lerp(60f, 30f, t);
+                    yield return null;
+                }
+            }
+            else
+            {
+                while (t < 1f)
+                {
+                    t = (Time.time - startTime) / 0.2f;
+                    _camera.Lens.FieldOfView = Mathf.Lerp(30f, 60f, t);
+                    yield return null;
+                }
             }
         }
-
     }
 }

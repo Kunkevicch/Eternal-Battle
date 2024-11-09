@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76052b261f5edb94ab24bc14250a68a9, type: 3}
+  m_Name: Gun_Revolver
+  m_EditorClassIdentifier: 
+  Type: 0
+  WeaponViewPrefab: {fileID: 1942508306435608442, guid: b55826cf06291a94c983452e907d0d4c, type: 3}
+  ReloadTime: 0.5
+  Name: Pistol
+  Damage: 100
+  ProjectileCount: 0
+  SpawnPoint: {x: 0.2, y: -0.2, z: 0.4}
+  SpawnRotation: {x: 0, y: 0, z: 0}
+  AimPoint: {x: 0, y: -0.1, z: 0.2}
+  AimRotation: {x: 0, y: -0.09, z: 0.08}
+  WeaponAnimatorController: {fileID: 22100000, guid: 403b33c8da22acb41b94593f206c8a68, type: 2}
+  ShootConfiguration: {fileID: 11400000, guid: 31ea62dc8dafcb543b3437dac9ea2cc2, type: 2}
+  TrailConfiguration: {fileID: 11400000, guid: 774898aabb5c94d4397d2fb6321ca0be, type: 2}
+  WeaponAudioConfig: {fileID: 11400000, guid: b2c41ad27add40349bb038ee64f5f818, type: 2}
+  WeaponAmmoConfig: {fileID: 11400000, guid: 043581a0cc0692d4f858327d90cc9f58, type: 2}

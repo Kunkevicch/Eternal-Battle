@@ -7,7 +7,7 @@ namespace EndlessRoad
     [CreateAssetMenu(fileName = "ImpactConfig", menuName = "Configs/Impact")]
     public class ImpactConfig : ScriptableObject
     {
-        public List<ImpactKeyPair> impactDictionary;
+        public List<ImpactKeyPair> ImpactDictionary;
 
         [Serializable]
         public struct ImpactKeyPair

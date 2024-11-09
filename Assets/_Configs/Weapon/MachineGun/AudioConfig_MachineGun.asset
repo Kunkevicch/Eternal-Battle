@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
+  m_Name: AudioConfig_MachineGun
+  m_EditorClassIdentifier: 
+  Volume: 0.198
+  FireClips:
+  - {fileID: 8300000, guid: b7deebd5011f662459f57ea4816684b4, type: 3}
+  - {fileID: 8300000, guid: 982c6850322f4e84dbe55edda126b96e, type: 3}
+  - {fileID: 8300000, guid: cfd7bf0dd65c63f4da2fd1f8fdad59ae, type: 3}
+  EquipClips:
+  - {fileID: 8300000, guid: 6cab4d571cdb00e49877450f87a17fcc, type: 3}
+  EmptyClip: {fileID: 8300000, guid: c9c46207f84d64541abedb635dcb93b3, type: 3}
+  ReloadClip: {fileID: 8300000, guid: 885f138fbdad35e44b27c7e77e541b89, type: 3}
+  LastBulletClip: {fileID: 0}

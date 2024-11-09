@@ -7,7 +7,7 @@ namespace EndlessRoad
     {
         [SerializeField] protected int _maxHealth;
         [field: SerializeField] public ImpactEffect ImpactPrefab { get; set; }
-        protected int _currentHealth;
+        [SerializeField] protected int _currentHealth;
 
         private void Awake()
         {
@@ -24,16 +24,19 @@ namespace EndlessRoad
             set
             {
                 _currentHealth = Mathf.Clamp(value, 0, MaxHealth);
+                
+                if (_currentHealth == 0)
+                {
+                    Dead?.Invoke();
+                }
             }
         }
-
 
         public void ApplyDamage(int damage)
         {
             if (damage < 0)
                 return;
             CurrentHealth -= damage;
-            Dead?.Invoke();
         }
     }
 }

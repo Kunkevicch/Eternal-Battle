@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b0e57c2f9f52144b9dd85c0af99778, type: 3}
   m_Name: ImpactConfig
   m_EditorClassIdentifier: 
-  impactDictionary:
-  - type: 2
-    effect: {fileID: -8304941653576871584, guid: 786e9b414b48ff2438e6b4d93ce99aef, type: 3}
+  ImpactDictionary:
   - type: 0
     effect: {fileID: 8039089777528929951, guid: fdac75e990da47649b31f10049c400b0, type: 3}
+  - type: 2
+    effect: {fileID: -8304941653576871584, guid: 786e9b414b48ff2438e6b4d93ce99aef, type: 3}
+  BulletDecal: {fileID: -4094090649648676868, guid: e5448bf09bf80c84683234d05d3ccf91, type: 3}

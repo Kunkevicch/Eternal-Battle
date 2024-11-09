@@ -13,12 +13,12 @@ namespace EndlessRoad
 
         public void DoImpactToTargetPoint(IImpactable impactable, Vector3 point)
         {
-            var effect = (ImpactEffect)_objectPool.ReuseComponent(
+            var impactEffect = (ImpactEffect)_objectPool.ReuseComponent(
                 impactable.ImpactPrefab.gameObject
                 , point
                 , Quaternion.identity
                 );
-            effect.gameObject.SetActive(true);
+            impactEffect.gameObject.SetActive(true);
         }
     }
 }
