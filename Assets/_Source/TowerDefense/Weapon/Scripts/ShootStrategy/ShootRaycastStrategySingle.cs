@@ -4,14 +4,14 @@ namespace EndlessRoad
 {
     public class ShootRaycastStrategySingle : ShootRaycastStrategyBase
     {
-        public ShootRaycastStrategySingle(ObjectPool objectPool, ShootTrail shootTrail) : base(objectPool, shootTrail)
+        public ShootRaycastStrategySingle(ObjectPool objectPool, AmmoBase shootTrail) : base(objectPool, shootTrail)
         {
         }
 
         public override void Shoot(
             Vector3 forwardDirection
             , Vector3 startPoint
-            , Vector3 spread
+            , float spread
             , float simulationSpeed
             , float duration
             , int damage
@@ -19,9 +19,10 @@ namespace EndlessRoad
             , float missDistance
             )
         {
-            ShootTrail instance = (ShootTrail)_objectPool.ReuseComponent(_shootTrail.gameObject, startPoint, Quaternion.identity);
+            IFireable instance = (IFireable)_objectPool.ReuseComponent(_ammo.gameObject, startPoint, Quaternion.LookRotation(forwardDirection));
+
             Vector3 direction = GetSpreadForProjectile(forwardDirection, spread);
-            instance.gameObject.SetActive(true);
+            instance.ActivateAmmo();
             if (Physics.Raycast(
                    startPoint
                    , direction

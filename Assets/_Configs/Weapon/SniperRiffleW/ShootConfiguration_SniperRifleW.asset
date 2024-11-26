@@ -15,7 +15,10 @@ MonoBehaviour:
   ImpactMask:
     serializedVersion: 2
     m_Bits: 448
-  Spread: {x: 0.5, y: 0.5, z: 0}
-  SpreadAiming: {x: 0, y: 0, z: 0}
-  SpreadMove: {x: 0.7, y: 0.7, z: 0}
+  SpreadRadius: 1
+  SpreadRadiusAiming: 0
+  SpreadRadiusMove: 2
+  SpreadType: 0
+  MaxSpreadTime: 0
   FireRate: 1.5
+  RecoilRecoverySpeed: 0

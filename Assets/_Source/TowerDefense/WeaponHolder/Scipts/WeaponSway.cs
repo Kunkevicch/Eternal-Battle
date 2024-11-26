@@ -55,7 +55,7 @@ namespace EndlessRoad
 
             Vector3 finalPosition = new Vector3(-moveX, -moveY, 0);
 
-            _weaponHolder.ActiveWeapon.transform.localPosition = Vector3.Lerp(_weaponHolder.ActiveWeapon.transform.localPosition, finalPosition + _initialPosition, Time.deltaTime * _smoothAmount);
+            _weaponHolder.Hand.transform.localPosition = Vector3.Lerp(_weaponHolder.Hand.transform.localPosition, finalPosition + _initialPosition, Time.deltaTime * _smoothAmount);
         }
 
         private void TiltSway()
@@ -69,7 +69,7 @@ namespace EndlessRoad
                 _rotationZ ? -tiltY : 0
                 ));
 
-            _weaponHolder.ActiveWeapon.transform.localRotation = Quaternion.Slerp(_weaponHolder.ActiveWeapon.transform.localRotation, finalRotation * _initialRotation, Time.deltaTime * _smoothAmount);
+            _weaponHolder.Hand.transform.localRotation = Quaternion.Slerp(_weaponHolder.Hand.transform.localRotation, finalRotation * _initialRotation, Time.deltaTime * _smoothAmount);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace EndlessRoad
 {
     interface IFireable
     {
-        public void InitializeAmmo(Vector3 fireDirection, LayerMask impactLayer, int damage, float speed);
-        public GameObject GetGameObject();
+        public void ActivateAmmo();
+        public void StartLaunch(Vector3 startPoint, Vector3 endPoint, RaycastHit hit, float speed, float duration, int damage);
     }
 }

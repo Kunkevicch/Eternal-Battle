@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -31,7 +32,6 @@ namespace EndlessRoad
         private float _lastShootTime;
         private float _initialClickedTime;
         private float _stopShootingTime;
-        private bool _lastFrameWantsToShoot;
 
         private bool _isMove;
         private bool _isAim;
@@ -42,7 +42,6 @@ namespace EndlessRoad
         public void Initialize(
             LayerMask impactMask
             , WeaponConfig weaponConfig
-            , ObjectPool objectPool
             , ShootRaycastStrategyBase shootStrategy
             )
         {
@@ -69,6 +68,10 @@ namespace EndlessRoad
             _shootStrategy = shootStrategy;
         }
 
+        public event Action WeaponReloaded;
+
+        public bool IsReloading => _isReloading;
+
         public WeaponAmmo WeaponAmmo => _weaponAmmo;
 
         public Vector3 SpawnPoint => _spawnPoint;
@@ -82,36 +85,36 @@ namespace EndlessRoad
         public void SetAimPosition(bool isAim)
         {
             _isAim = isAim;
-            StopCoroutine(SetAimPositionRoutine());
-            StartCoroutine(SetAimPositionRoutine());
+            //StopCoroutine(SetAimPositionRoutine());
+            //StartCoroutine(SetAimPositionRoutine());
         }
 
-        private IEnumerator SetAimPositionRoutine()
-        {
-            float startTime = Time.time;
-            Vector3 startPosition = transform.localPosition;
+        //private IEnumerator SetAimPositionRoutine()
+        //{
+        //    float startTime = Time.time;
+        //    Vector3 startPosition = transform.localPosition;
 
-            if (_isAim)
-            {
-                float t = 0;
-                while (t < 1f)
-                {
-                    t = (Time.time - startTime) / 0.2f;
-                    transform.localPosition = Vector3.Lerp(startPosition, _aimPoint, t);
-                    yield return null;
-                }
-            }
-            else
-            {
-                float t = 0;
-                while (t < 1f)
-                {
-                    t = (Time.time - startTime) / 0.2f;
-                    transform.localPosition = Vector3.Lerp(startPosition, _spawnPoint, t);
-                    yield return null;
-                }
-            }
-        }
+        //    if (_isAim)
+        //    {
+        //        float t = 0;
+        //        while (t < 1f)
+        //        {
+        //            t = (Time.time - startTime) / 0.2f;
+        //            transform.localPosition = Vector3.Lerp(startPosition, _aimPoint, t);
+        //            yield return null;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        float t = 0;
+        //        while (t < 1f)
+        //        {
+        //            t = (Time.time - startTime) / 0.2f;
+        //            transform.localPosition = Vector3.Lerp(startPosition, _spawnPoint, t);
+        //            yield return null;
+        //        }
+        //    }
+        //}
 
         public void SetWeaponForPlayer(bool isPlayerWeapon)
         {
@@ -123,7 +126,7 @@ namespace EndlessRoad
             if (_isPlayerWeapon)
             {
                 _audioConfig?.PlayEquipClip(_audioSource);
-                _animator?.Play("Equip");
+                //_animator?.Play("Equip");
             }
         }
 
@@ -131,25 +134,47 @@ namespace EndlessRoad
         {
             if (_isPlayerWeapon)
             {
-                _weaponTransform.localEulerAngles = Vector3.zero;
-                _weaponTransform.localPosition = Vector3.zero;
+                //_weaponTransform.localEulerAngles = Vector3.zero;
+                //_weaponTransform.localPosition = Vector3.zero;
                 _isReloading = false;
             }
         }
 
-        public void Tick(bool wantsToShoot)
+
+        public void Tick(bool wantsToShoot, out bool canshoot)
         {
             if (wantsToShoot)
             {
-                _lastFrameWantsToShoot = true;
+                canshoot = CanShoot();
                 Shoot();
             }
-            else if (!wantsToShoot && _lastFrameWantsToShoot)
+            else
             {
+                canshoot = false;
                 _stopShootingTime = Time.time;
-                _lastFrameWantsToShoot = false;
             }
         }
+
+        public Vector3 GetForwardDirection() =>
+            _isPlayerWeapon ? Camera.main.transform.forward
+            + Camera.main.transform.TransformDirection(new Vector3(0, -transform.rotation.x, 0))
+            : _muzzleParticle.transform.forward;
+
+        public float GetCurrentSpread() =>
+            _weaponConfiguration.ShootConfiguration.GetSpread(
+                Time.time - _initialClickedTime
+                , _isAim
+                , _isMove
+                );
+
+        public void StartReload()
+        {
+            if (!_weaponAmmo.CanReload() || _isReloading)
+                return;
+            _isReloading = true;
+            StartCoroutine(ReloadRoutine());
+        }
+
 
         private void Shoot()
         {
@@ -167,24 +192,24 @@ namespace EndlessRoad
                 _initialClickedTime = Time.time - Mathf.Lerp(0, lastDuration, Mathf.Clamp01(lerpTime));
             }
 
-            if (Time.time > _fireRate + _lastShootTime)
+            if (CanShoot())
             {
                 _lastShootTime = Time.time;
 
                 if (_weaponAmmo.IsEmpty())
                 {
-                    _audioConfig.PlayEmptyClip(_audioSource);
-                    if (!_isReloading)
+                    if (_isPlayerWeapon)
                     {
-                        StartReload();
+                        _audioConfig.PlayEmptyClip(_audioSource);
                     }
+
                     return;
                 }
 
                 _shootStrategy.Shoot(
                     GetForwardDirection()
                     , _muzzleParticle.transform.position
-                    , _weaponConfiguration.ShootConfiguration.GetSpread(Time.time - _initialClickedTime, _isAim, _isMove)
+                    , GetCurrentSpread()
                     , _weaponConfiguration.TrailConfiguration.SimulationSpeed
                     , _weaponConfiguration.TrailConfiguration.Duration
                     , _damage
@@ -196,7 +221,7 @@ namespace EndlessRoad
 
                 if (_isPlayerWeapon)
                 {
-                    _animator?.Play("Fire");
+                    //_animator?.Play("Fire");
                 }
 
                 _weaponAmmo.DecreaseAmmo();
@@ -206,20 +231,13 @@ namespace EndlessRoad
             }
         }
 
-        public void StartReload()
-        {
-            if (!_weaponAmmo.CanReload() || _isReloading)
-                return;
-            _isReloading = true;
-            StartCoroutine(ReloadRoutine());
-
-        }
+        private bool CanShoot() => Time.time > _fireRate + _lastShootTime;
 
         private IEnumerator ReloadRoutine()
         {
             if (_isPlayerWeapon)
             {
-                _animator.Play("StartReload");
+                //_animator.Play("StartReload");
             }
 
             yield return new WaitForSeconds(_reloadTime);
@@ -231,15 +249,11 @@ namespace EndlessRoad
                 {
                     yield return null;
                 }
-                _animator.Play("EndReload");
+                //_animator.Play("EndReload");
             }
             _weaponAmmo.Reload();
             _isReloading = false;
+            WeaponReloaded?.Invoke();
         }
-
-        private Vector3 GetForwardDirection() =>
-            _isPlayerWeapon ? Camera.main.transform.forward
-            + Camera.main.transform.TransformDirection(Vector3.zero)
-            : _muzzleParticle.transform.forward;
     }
 }

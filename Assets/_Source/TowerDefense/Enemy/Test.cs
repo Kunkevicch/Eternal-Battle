@@ -24,7 +24,7 @@ namespace EndlessRoad
         void Update()
         {
             transform.position += transform.right * Time.deltaTime * 1f;
-            weaponView.Tick(true);
+            weaponView.Tick(true, out bool canshoot);
         }
     }
 }

@@ -6,42 +6,38 @@ namespace EndlessRoad
     public class WeaponShootConfiguration : ScriptableObject
     {
         public LayerMask ImpactMask;
-        public Vector3 Spread = new(0.1f, 0.1f, 0.1f);
-        public Vector3 SpreadAiming;
-        public Vector3 SpreadMove;
+        public float SpreadRadius;
+        public float SpreadRadiusAiming;
+        public float SpreadRadiusMove;
 
         public SpreadType SpreadType;
         public float MaxSpreadTime;
         public float FireRate;
         public float RecoilRecoverySpeed;
 
-        public Vector3 GetSpread(float shootTime, bool isAim, bool isMove)
+        public float GetSpread(float shootTime, bool isAim, bool isMove)
         {
-            Vector3 spread = Spread;
+            float spread = 0;
 
             if (isMove)
             {
-                spread = SpreadMove;
+                spread = SpreadRadiusMove;
             }
 
             if (SpreadType == SpreadType.Simple)
             {
                 if (isAim)
                 {
-                    spread = SpreadAiming;
+                    spread = SpreadRadiusAiming;
                 }
                 else
                 {
-                    spread = Spread;
+                    spread = SpreadRadius;
                 }
             }
             else if (SpreadType == SpreadType.TimeDependent)
             {
-                spread = Vector3.Lerp(
-                    Vector3.zero
-                    , new Vector3(Random.Range(-Spread.x, Spread.x), Random.Range(-Spread.y, Spread.y))
-                    , Mathf.Clamp01(shootTime / MaxSpreadTime)
-                    );
+                spread = Mathf.Lerp(0, SpreadRadius, Mathf.Clamp01(shootTime / MaxSpreadTime));
             }
 
             return spread;

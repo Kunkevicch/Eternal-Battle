@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: d4e79174a9d07f142a12ffce2eba29a8, type: 3}
@@ -52,7 +53,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: d4e79174a9d07f142a12ffce2eba29a8, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: d82630c95af72ef439a97df3f1f4d651, type: 2}
     - target: {fileID: 919132149155446097, guid: d4e79174a9d07f142a12ffce2eba29a8, type: 3}
@@ -60,6 +61,12 @@ PrefabInstance:
       value: SM_Wep_Shotgun_Barrel_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d4e79174a9d07f142a12ffce2eba29a8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 380738577}
   m_SourcePrefab: {fileID: 100100000, guid: d4e79174a9d07f142a12ffce2eba29a8, type: 3}
 --- !u!1 &7364130537896587451 stripped
 GameObject:
@@ -74,9 +81,17 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7364130537896587451}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 9128530370277024461, guid: 5dde1154b4e575c4eb47bb3a7da777bb, type: 2}

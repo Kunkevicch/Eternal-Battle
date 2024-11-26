@@ -22,7 +22,7 @@ MonoBehaviour:
   SpawnRotation: {x: 0, y: 0, z: 0}
   AimPoint: {x: 0, y: -0.2, z: 0.5}
   AimRotation: {x: 0, y: 0, z: 0}
-  WeaponAnimatorController: {fileID: 22100000, guid: 3e78891028235e5499202c7dec22d0e9, type: 2}
+  AnimatorController: {fileID: 22100000, guid: 33950915533f0944581e8212c2cb96a8, type: 2}
   ShootConfiguration: {fileID: 11400000, guid: 3445d4cf933a1e144b7278b8e5d21a81, type: 2}
   TrailConfiguration: {fileID: 11400000, guid: 25745b7b2f304554fb9366fe713de513, type: 2}
   WeaponAudioConfig: {fileID: 11400000, guid: c8c727ed581ee7745822c8ed4ca82f0b, type: 2}

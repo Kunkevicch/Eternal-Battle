@@ -17,6 +17,8 @@ namespace EndlessRoad
         public Vector3 AimPoint;
         public Vector3 AimRotation;
 
+        public AnimatorOverrideController AnimatorController;
+
         public WeaponShootConfiguration ShootConfiguration;
         public WeaponTrailConfiguration TrailConfiguration;
         public WeaponAudioConfig WeaponAudioConfig;
@@ -26,13 +28,12 @@ namespace EndlessRoad
         {
             WeaponView weaponView = Instantiate(WeaponViewPrefab.gameObject).GetComponent<WeaponView>();
             weaponView.transform.SetParent(parent, false);
-            weaponView.transform.localPosition = SpawnPoint;
-            weaponView.transform.localRotation = Quaternion.Euler(SpawnRotation);
+            //weaponView.transform.localPosition = SpawnPoint;
+            //weaponView.transform.localRotation = Quaternion.Euler(SpawnRotation);
             ShootRaycastStrategyBase shootStrategy = GetShootStrategyByWeaponType(objectPool);
             weaponView.Initialize(
                 ShootConfiguration.ImpactMask
                 , this
-                , objectPool
                 , shootStrategy
                 );
 

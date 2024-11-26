@@ -5,23 +5,23 @@ namespace EndlessRoad
     public abstract class ShootRaycastStrategyBase
     {
         protected readonly ObjectPool _objectPool;
-        protected readonly ShootTrail _shootTrail;
+        protected readonly AmmoBase _ammo;
 
-        public ShootRaycastStrategyBase(ObjectPool objectPool, ShootTrail shootTrail)
+        public ShootRaycastStrategyBase(ObjectPool objectPool, AmmoBase ammo)
         {
             _objectPool = objectPool;
-            _shootTrail = shootTrail;
+            _ammo = ammo;
         }
 
-        protected Vector3 GetSpreadForProjectile(Vector3 direction, Vector3 spread)
+        protected Vector3 GetSpreadForProjectile(Vector3 direction, float spreadRadius)
         {
-            return direction + new Vector3(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y));
+            return direction + Random.insideUnitSphere * spreadRadius;
         }
 
         public abstract void Shoot(
             Vector3 shootDirection
             , Vector3 startPoint
-            , Vector3 spread
+            , float spread
             , float simulationSpeed
             , float duration
             , int damage

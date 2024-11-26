@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace EndlessRoad.Shooter
 {
@@ -40,7 +38,7 @@ namespace EndlessRoad.Shooter
         {
             _test.Initialize();
             _controller = GetComponent<CharacterController>();
-            _weaponHolder = _camera.GetComponentInChildren<WeaponHolder>();
+            _weaponHolder = GetComponentInChildren<WeaponHolder>();
             _playerInput = new();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -60,14 +58,14 @@ namespace EndlessRoad.Shooter
 
             _playerInput.Player.Jump.started += OnJump;
 
-            _playerInput.Player.Fire.started += ctx => _isShooting = true;
-            _playerInput.Player.Fire.canceled += ctx => _isShooting = false;
+            _playerInput.Player.Fire.started += OnStartShooting;//_isShooting = true;
+            _playerInput.Player.Fire.canceled += OnCancelShooting;//_isShooting = false;
 
             _playerInput.Player.Aim.started += OnAim;
 
             _playerInput.Player.ChangeWeapon.started += OnChangeWeapon;
 
-            _playerInput.Player.Reload.started += ctx => ActiveWeapon.StartReload();
+            _playerInput.Player.Reload.started += ctx => _weaponHolder.Reload();
         }
 
         private void OnDisable()
@@ -79,20 +77,20 @@ namespace EndlessRoad.Shooter
 
             _playerInput.Player.Jump.started -= OnJump;
 
-            _playerInput.Player.Fire.started -= ctx => _isShooting = true;
-            _playerInput.Player.Fire.canceled -= ctx => _isShooting = false;
+            _playerInput.Player.Fire.started -= OnStartShooting;
+            _playerInput.Player.Fire.canceled -= OnCancelShooting;
 
             _playerInput.Player.Aim.started -= OnAim;
 
             _playerInput.Player.ChangeWeapon.started -= OnChangeWeapon;
 
-            _playerInput.Player.Reload.started -= ctx => ActiveWeapon.StartReload();
+            _playerInput.Player.Reload.started -= ctx => _weaponHolder.Reload();
         }
 
         private void Update()
         {
+            _weaponHolder.transform.rotation = _camera.transform.rotation;
             _weaponHolder.Sway(lookDirection.x, lookDirection.y);
-            _weaponHolder.Shoot(_isShooting);
         }
 
         private void FixedUpdate()
@@ -131,6 +129,27 @@ namespace EndlessRoad.Shooter
                 return;
 
             _weaponHolder.SetWeapon(context.ReadValue<float>() < 0 ? SetWeaponDirection.Previous : SetWeaponDirection.Next);
+        }
+
+        private void OnStartShooting(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            _isShooting = true;
+            StartCoroutine(ShootingRoutine());
+        }
+
+        private IEnumerator ShootingRoutine()
+        {
+            while (_isShooting)
+            {
+                _weaponHolder.Shoot(_isShooting);
+                yield return null;
+            }
+        }
+
+        private void OnCancelShooting(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            _isShooting = false;
+            _weaponHolder.Shoot(false);
         }
 
         private void OnAim(UnityEngine.InputSystem.InputAction.CallbackContext context)

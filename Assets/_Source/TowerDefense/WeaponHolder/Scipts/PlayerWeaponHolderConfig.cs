@@ -16,7 +16,7 @@ namespace EndlessRoad
             foreach (var weapon in _weapons)
             {
                 WeaponView weaponView = weapon.Spawn(weaponHolder.transform, objectPool);
-                weaponHolder.AddWeapon(weaponView);
+                weaponHolder.AddWeapon(weaponView, weapon.AnimatorController);
             }
         }
     }

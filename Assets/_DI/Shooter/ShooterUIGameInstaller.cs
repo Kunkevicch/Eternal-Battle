@@ -7,6 +7,7 @@ namespace EndlessRoad
     {
         [SerializeField] private AmmoView _ammoInClipView;
         [SerializeField] private AmmoView _currentAmmoView;
+        [SerializeField] private CrossHairView _crossHairView;
 
         public override void InstallBindings()
         {
@@ -18,6 +19,11 @@ namespace EndlessRoad
             Container.BindInterfacesAndSelfTo<CurrentAmmoPresenter>()
                 .AsSingle()
                 .WithArguments(_currentAmmoView)
+                .NonLazy();
+
+            Container.BindInterfacesAndSelfTo<CrossHairPresenter>()
+                .AsSingle()
+                .WithArguments(_crossHairView)
                 .NonLazy();
         }
     }

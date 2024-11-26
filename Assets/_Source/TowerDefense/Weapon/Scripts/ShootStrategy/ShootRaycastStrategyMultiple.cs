@@ -6,7 +6,7 @@ namespace EndlessRoad
     {
         private readonly int _projectileCount;
 
-        public ShootRaycastStrategyMultiple(ObjectPool objectPool, ShootTrail shootTrail, int projectileCount) : base(objectPool, shootTrail)
+        public ShootRaycastStrategyMultiple(ObjectPool objectPool, AmmoBase ammo, int projectileCount) : base(objectPool, ammo)
         {
             _projectileCount = projectileCount;
         }
@@ -14,7 +14,7 @@ namespace EndlessRoad
         public override void Shoot(
             Vector3 forwardDirection
             , Vector3 startPoint
-            , Vector3 spread
+            , float spreadRadius
             , float simulationSpeed
             , float duration
             , int damage
@@ -25,10 +25,9 @@ namespace EndlessRoad
 
             for (int i = 0; i < _projectileCount; i++)
             {
-                ShootTrail instance = (ShootTrail)_objectPool.ReuseComponent(_shootTrail.gameObject, startPoint, Quaternion.identity);
-                //Random.InitState(i + Time.frameCount);
-                Vector3 shootDirection = GetSpreadForProjectile(forwardDirection, spread);
-                instance.gameObject.SetActive(true);
+                IFireable instance = (IFireable)_objectPool.ReuseComponent(_ammo.gameObject, startPoint, Quaternion.identity);
+                Vector3 shootDirection = GetSpreadForProjectile(forwardDirection, spreadRadius);
+                instance.ActivateAmmo();
                 if (Physics.Raycast(
                    startPoint
                    , shootDirection

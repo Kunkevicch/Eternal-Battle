@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,15 @@ namespace EndlessRoad
 {
     public class WeaponHolder : MonoBehaviour
     {
+        [SerializeField] private Transform _handTransform;
+        [SerializeField] private Transform _animatorTransform;
+
         private List<WeaponView> _weapons = new();
+        private Dictionary<WeaponView, AnimatorOverrideController> _animators = new();
+
+        private bool _isAim;
+
+        private WeaponHolderAnimator _animator;
 
         private WeaponSway _weaponSway;
         private WeaponRecoil _weaponRecoil;
@@ -17,14 +26,19 @@ namespace EndlessRoad
 
         private void Awake()
         {
+            _animator = new WeaponHolderAnimator(GetComponentInChildren<Animator>());
             _currentAmmoInformer = new();
             _weaponSway = GetComponent<WeaponSway>();
             _weaponRecoil = GetComponent<WeaponRecoil>();
         }
 
+        public event Action WeaponChanged;
+        public event Action<bool> WeaponShooted;
+
         public CurrentAmmoInformer CurrentAmmoInformer => _currentAmmoInformer;
 
         public WeaponView ActiveWeapon => _activeWeapon;
+        public Transform Hand => _handTransform;
 
         public void AddWeapon(WeaponView newWeapon, AnimatorOverrideController animatorController = null)
         {
@@ -35,11 +49,22 @@ namespace EndlessRoad
             newWeapon.gameObject.SetActive(false);
             _weapons.Add(newWeapon);
 
-            _activeWeapon ??= newWeapon;
+            _animators[newWeapon] = animatorController;
 
-            _weaponSway.SetInitialPositionAndRotation(_activeWeapon.transform.localPosition, _activeWeapon.transform.localRotation);
+            if (!_activeWeapon)
+            {
+                _activeWeapon = newWeapon;
+                _activeWeapon.WeaponReloaded += OnWeaponReloaded;
+                _activeWeapon.transform.SetParent(_animatorTransform);
+                _animator.SetAnimatorController(_animators[_activeWeapon]);
+                _handTransform.localPosition = _activeWeapon.SpawnPoint;
+                _handTransform.localRotation = Quaternion.Euler(_activeWeapon.SpawnRotation);
+                UpdateAmmoInformation();
+            }
 
-            _weaponRecoil.SetHand(_activeWeapon.transform);
+            _weaponSway.SetInitialPositionAndRotation(_handTransform.transform.localPosition, _handTransform.transform.localRotation);
+
+            _weaponRecoil.SetHand(_handTransform);
             _activeWeapon.gameObject.SetActive(true);
         }
 
@@ -47,8 +72,9 @@ namespace EndlessRoad
         {
             if (_weapons.Count == 0)
                 return;
-
+            _activeWeapon.WeaponReloaded -= OnWeaponReloaded;
             _activeWeapon.gameObject.SetActive(false);
+            _activeWeapon.transform.SetParent(transform);
             int activeWeaponIndex = _weapons.IndexOf(_activeWeapon);
 
             if (direction == SetWeaponDirection.Next)
@@ -74,40 +100,66 @@ namespace EndlessRoad
                 }
             }
 
-            _currentAmmoInformer.CurrentAmmoInClip = _activeWeapon.WeaponAmmo.CurrentClipAmmo.ToString();
-            _currentAmmoInformer.CurrentAmmo = _activeWeapon.WeaponAmmo.CurrentAmmo.ToString();
+            UpdateAmmoInformation();
 
+            _activeWeapon.transform.SetParent(_animatorTransform);
+            _activeWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             _activeWeapon.gameObject.SetActive(true);
+            _activeWeapon.WeaponReloaded += OnWeaponReloaded;
 
-            _weaponSway.SetInitialPositionAndRotation(_activeWeapon.transform.localPosition, _activeWeapon.transform.localRotation);
-            _weaponRecoil.SetHand(_activeWeapon.transform);
+            _handTransform.localPosition = _activeWeapon.SpawnPoint;
+            _handTransform.localRotation = Quaternion.Euler(_activeWeapon.SpawnRotation);
+            
+            _animator.SetAnimatorController(_animators[_activeWeapon]);
+            _animator.PlayEquip();
+
+            WeaponChanged?.Invoke();
+
+            _weaponSway.SetInitialPositionAndRotation(_handTransform.localPosition, _handTransform.localRotation);
+            _weaponRecoil.SetHand(_handTransform);
         }
 
         public void Sway(float X, float Y) => _weaponSway.SwayProcess(X, Y);
 
         public void Shoot(bool wantsToShoot)
         {
-            _activeWeapon.Tick(wantsToShoot);
-            if (wantsToShoot)
+            if (_activeWeapon.IsReloading)
+                return;
+
+            if (_activeWeapon.WeaponAmmo.IsEmpty() && _activeWeapon.WeaponAmmo.CanReload())
             {
-                if (!_activeWeapon.WeaponAmmo.IsEmpty())
-                {
-                    _weaponRecoil.RecoilProcess();
-                }
-                _currentAmmoInformer.CurrentAmmoInClip = _activeWeapon.WeaponAmmo.CurrentClipAmmo.ToString();
-                _currentAmmoInformer.CurrentAmmo = _activeWeapon.WeaponAmmo.CurrentAmmo.ToString();
+                Reload();
+                WeaponShooted?.Invoke(false);
             }
+            else
+            {
+                _activeWeapon.Tick(wantsToShoot, out bool canShoot);
+                WeaponShooted?.Invoke(wantsToShoot);
+                if (canShoot)
+                {
+                    if (wantsToShoot)
+                    {
+                        if (!_activeWeapon.WeaponAmmo.IsEmpty())
+                        {
+                            _weaponRecoil.RecoilProcess();
+                        }
+                        UpdateAmmoInformation();
+                    }
+                }
+            }
+
         }
 
         public void Reload()
         {
             _activeWeapon.StartReload();
+            _animator.PlayReloadStart();
         }
 
         public void Aim(bool aimStatus)
         {
             _activeWeapon?.SetAimPosition(aimStatus);
-
+            SetAimPosition(aimStatus);
             if (aimStatus)
             {
                 _weaponSway.SetInitialPositionAndRotation(_activeWeapon.AimPoint, Quaternion.Euler(_activeWeapon.AimRotation));
@@ -119,36 +171,51 @@ namespace EndlessRoad
 
             _weaponRecoil.SetAimState(aimStatus);
         }
-    }
 
-    public class CurrentAmmoInformer
-    {
-        private string _currentAmmoInClip;
-        private string _currentAmmo;
-
-        public string CurrentAmmoInClip
+        private void SetAimPosition(bool isAim)
         {
-            get => _currentAmmoInClip;
+            _isAim = isAim;
+            StopCoroutine(SetAimPositionRoutine());
+            StartCoroutine(SetAimPositionRoutine());
+        }
 
-            set
+        private IEnumerator SetAimPositionRoutine()
+        {
+            float startTime = Time.time;
+            Vector3 startPosition = _handTransform.localPosition;
+
+            if (_isAim)
             {
-                _currentAmmoInClip = value;
-                AmmoInClipChanged?.Invoke(value);
+                float t = 0;
+                while (t < 1f)
+                {
+                    t = (Time.time - startTime) / 0.2f;
+                    _handTransform.localPosition = Vector3.Lerp(startPosition, _activeWeapon.AimPoint, t);
+                    yield return null;
+                }
+            }
+            else
+            {
+                float t = 0;
+                while (t < 1f)
+                {
+                    t = (Time.time - startTime) / 0.2f;
+                    _handTransform.localPosition = Vector3.Lerp(startPosition, _activeWeapon.SpawnPoint, t);
+                    yield return null;
+                }
             }
         }
 
-        public string CurrentAmmo
+        private void OnWeaponReloaded()
         {
-            get => _currentAmmo;
-
-            set
-            {
-                _currentAmmo = value;
-                CurrentAmmoChanged?.Invoke(value);
-            }
+            _animator.PlayReloadEnd();
+            UpdateAmmoInformation();
         }
 
-        public event Action<string> CurrentAmmoChanged;
-        public event Action<string> AmmoInClipChanged;
+        private void UpdateAmmoInformation()
+        {
+            _currentAmmoInformer.CurrentAmmoInClip = _activeWeapon.WeaponAmmo.CurrentClipAmmo.ToString();
+            _currentAmmoInformer.CurrentAmmo = _activeWeapon.WeaponAmmo.CurrentAmmo.ToString();
+        }
     }
 }

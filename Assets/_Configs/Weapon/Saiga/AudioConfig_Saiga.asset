@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
+  m_Name: AudioConfig_Saiga
+  m_EditorClassIdentifier: 
+  Volume: 0.392
+  FireClips:
+  - {fileID: 8300000, guid: a130707dae08c8b4982ef79eb268fb79, type: 3}
+  - {fileID: 8300000, guid: 6335062a8b629e14c89a7a5a7192b9da, type: 3}
+  - {fileID: 8300000, guid: 06848a76eba5c684da640a0bc4b2ad15, type: 3}
+  EquipClips:
+  - {fileID: 8300000, guid: 9ba8e26d0ac72214881fb099631e9e54, type: 3}
+  EmptyClip: {fileID: 8300000, guid: 7c690cd641676754c8a59d6d7121f5f4, type: 3}
+  ReloadClip: {fileID: 8300000, guid: 73bb45af7a160544c9819673d3c5e046, type: 3}
+  LastBulletClip: {fileID: 0}
