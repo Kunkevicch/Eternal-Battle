@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
+  m_Name: AudioConfig_DoubleBarrelShotgun
+  m_EditorClassIdentifier: 
+  Volume: 0.392
+  FireClips:
+  - {fileID: 8300000, guid: 74761a48ac719444bbda31bbd40561e7, type: 3}
+  - {fileID: 8300000, guid: 237523b1ec2fef947afd8891fcaf5b42, type: 3}
+  - {fileID: 8300000, guid: 7e9928eec9714af41a6fec6233f9886c, type: 3}
+  - {fileID: 8300000, guid: 149d82d042b54a44491942526c8d1b36, type: 3}
+  - {fileID: 8300000, guid: 78d109e9d043ad14094a41e7553f4d1e, type: 3}
+  EquipClips:
+  - {fileID: 8300000, guid: dd91eba3dc39a9346b5e1b20a64b952f, type: 3}
+  - {fileID: 8300000, guid: 076434f79ab888247bc0b9977324206e, type: 3}
+  - {fileID: 8300000, guid: d83ebe2f4bf13ed40bb99bbb08690296, type: 3}
+  EmptyClip: {fileID: 8300000, guid: 97a063c553c06df4bb1aebb294dce78a, type: 3}
+  ReloadClip: {fileID: 8300000, guid: 3956b4744022c6243a0f48cc2360717a, type: 3}
+  LastBulletClip: {fileID: 0}

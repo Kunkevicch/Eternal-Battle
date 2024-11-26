@@ -1,6 +1,7 @@
-using Cinemachine;
-using System;
+using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
+using Zenject;
 
 namespace EndlessRoad.Shooter
 {
@@ -8,88 +9,187 @@ namespace EndlessRoad.Shooter
     {
         [SerializeField] private float _jumpHeight;
         [SerializeField] private float _moveSpeed;
-        [SerializeField] private float smoothTime = 0.05f;
+        [SerializeField] private CinemachineCamera _camera;
+        [SerializeField] private PlayerWeaponHolderConfig _weaponHolderConfig;
+
+        private WeaponHolder _weaponHolder;
+
+        private bool _isAim;
+        private bool _isShooting;
+        private bool _isGrounded;
 
         private CharacterController _controller;
-        private CinemachineVirtualCamera _camera;
         private PlayerInput _playerInput;
-
         private Vector3 _playerVelocity;
-        private float xRotation;
-        private bool _isGrounded;
+
+        private ObjectPool _test; // TODO: Перенести обжект пул либо в gamecontroller, либо 
+
+        [Inject]
+        public void Construct(ObjectPool objectPool)
+        {
+            _test = objectPool;
+        }
+
+        private Vector2 MoveDirection => _playerInput.Player.Move.ReadValue<Vector2>();
+        private Vector2 lookDirection => _playerInput.Player.Rotation.ReadValue<Vector2>();
+        private WeaponView ActiveWeapon => _weaponHolder.ActiveWeapon;
 
         private void Awake()
         {
+            _test.Initialize();
             _controller = GetComponent<CharacterController>();
-            _camera = GetComponentInChildren<CinemachineVirtualCamera>();
+            _weaponHolder = GetComponentInChildren<WeaponHolder>();
             _playerInput = new();
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        private void Start()
+        {
+            _weaponHolderConfig.SpawnWeaponInHolder(_weaponHolder, _test);
         }
 
         private void OnEnable()
         {
             _playerInput.Enable();
+
+            _playerInput.Player.Move.started += ctx => ActiveWeapon.SetShootMove(true);
+            _playerInput.Player.Move.canceled += ctx => ActiveWeapon.SetShootMove(false);
+
             _playerInput.Player.Jump.started += OnJump;
+
+            _playerInput.Player.Fire.started += OnStartShooting;//_isShooting = true;
+            _playerInput.Player.Fire.canceled += OnCancelShooting;//_isShooting = false;
+
+            _playerInput.Player.Aim.started += OnAim;
+
+            _playerInput.Player.ChangeWeapon.started += OnChangeWeapon;
+
+            _playerInput.Player.Reload.started += ctx => _weaponHolder.Reload();
         }
 
         private void OnDisable()
         {
             _playerInput.Disable();
-            _playerInput.Player.Jump.started -= OnJump;
-        }
 
-        private void Start()
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            _playerInput.Player.Move.started -= ctx => _weaponHolder.ActiveWeapon.SetShootMove(true);
+            _playerInput.Player.Move.canceled -= ctx => _weaponHolder.ActiveWeapon.SetShootMove(false);
+
+            _playerInput.Player.Jump.started -= OnJump;
+
+            _playerInput.Player.Fire.started -= OnStartShooting;
+            _playerInput.Player.Fire.canceled -= OnCancelShooting;
+
+            _playerInput.Player.Aim.started -= OnAim;
+
+            _playerInput.Player.ChangeWeapon.started -= OnChangeWeapon;
+
+            _playerInput.Player.Reload.started -= ctx => _weaponHolder.Reload();
         }
 
         private void Update()
         {
-            _isGrounded = IsGrounded();
+            _weaponHolder.transform.rotation = _camera.transform.rotation;
+            _weaponHolder.Sway(lookDirection.x, lookDirection.y);
         }
 
         private void FixedUpdate()
         {
-            Move(_playerInput.Player.Move.ReadValue<Vector2>());
-        }
-
-        private void LateUpdate()
-        {
-            LookAtDirection(_playerInput.Player.Rotation.ReadValue<Vector2>());
+            _isGrounded = IsGrounded();
+            Move(MoveDirection);
         }
 
         private void Move(Vector2 input)
         {
-            Vector3 moveDirection = new(input.x, 0, input.y);
-            _controller.Move(transform.TransformDirection(moveDirection) * _moveSpeed * Time.deltaTime);
-
-            _playerVelocity.y += Physics.gravity.y * 2f * Time.deltaTime;
+            Vector3 move = _camera.transform.forward * input.y + _camera.transform.right * input.x;
+            move.y = 0f;
+            _controller.Move(move * _moveSpeed * Time.fixedDeltaTime);
+            _playerVelocity.y += Physics.gravity.y * 2f * Time.fixedDeltaTime;
 
             if (_isGrounded && _playerVelocity.y < 0)
             {
                 _playerVelocity.y = -2f;
             }
 
-            _controller.Move(_playerVelocity * Time.deltaTime);
+            _controller.Move(_playerVelocity * Time.fixedDeltaTime);
         }
 
         private bool IsGrounded() => _controller.isGrounded;
-
-        private void LookAtDirection(Vector2 direction)
-        {
-            float mouseX = direction.x;
-            float mouseY = direction.y;
-            xRotation -= (mouseY * Time.deltaTime) * 30f;
-            xRotation = Mathf.Clamp(xRotation, -80f, 80f);
-            _camera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-            transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * 30f);
-        }
 
         private void OnJump(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
             if (!_isGrounded) return;
 
             _playerVelocity.y = Mathf.Sqrt(_jumpHeight * -3f * Physics.gravity.y);
+        }
+
+        private void OnChangeWeapon(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            if (_isAim || _isShooting)
+                return;
+
+            _weaponHolder.SetWeapon(context.ReadValue<float>() < 0 ? SetWeaponDirection.Previous : SetWeaponDirection.Next);
+        }
+
+        private void OnStartShooting(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            _isShooting = true;
+            StartCoroutine(ShootingRoutine());
+        }
+
+        private IEnumerator ShootingRoutine()
+        {
+            while (_isShooting)
+            {
+                _weaponHolder.Shoot(_isShooting);
+                yield return null;
+            }
+        }
+
+        private void OnCancelShooting(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            _isShooting = false;
+            _weaponHolder.Shoot(false);
+        }
+
+        private void OnAim(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            _isAim = !_isAim;
+            if (_isAim)
+            {
+                _camera.Lens.FieldOfView = 30f;
+            }
+            else
+            {
+                _camera.Lens.FieldOfView = 60f;
+            }
+            StopCoroutine(AimRoutine());
+            StartCoroutine(AimRoutine());
+            _weaponHolder.Aim(_isAim);
+        }
+
+        private IEnumerator AimRoutine()
+        {
+            float startTime = Time.time;
+            float t = 0;
+            if (_isAim)
+            {
+                while (t < 1f)
+                {
+                    t = (Time.time - startTime) / 0.2f;
+                    _camera.Lens.FieldOfView = Mathf.Lerp(60f, 30f, t);
+                    yield return null;
+                }
+            }
+            else
+            {
+                while (t < 1f)
+                {
+                    t = (Time.time - startTime) / 0.2f;
+                    _camera.Lens.FieldOfView = Mathf.Lerp(30f, 60f, t);
+                    yield return null;
+                }
+            }
         }
     }
 }

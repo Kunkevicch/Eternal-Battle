@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ProjectDiva
+namespace EndlessRoad
 {
     [CreateAssetMenu(fileName = "ObjectsForPooling_", menuName = "Configs/Objects For Pooling")]
     public class ObjectForPooling : ScriptableObject
