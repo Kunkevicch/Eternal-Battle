@@ -98,6 +98,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7209988113372744512, guid: 9fde90626a5358d47931ba55498b1700, type: 3}
+      propertyPath: _weaponTransform
+      value: 
+      objectReference: {fileID: 7180033688620181300}
     - target: {fileID: 3822766965450622234, guid: 9fde90626a5358d47931ba55498b1700, type: 3}
       propertyPath: m_Name
       value: DoubleBarrelShotgun

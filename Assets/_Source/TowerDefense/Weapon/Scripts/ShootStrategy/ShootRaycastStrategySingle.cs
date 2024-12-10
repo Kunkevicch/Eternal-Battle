@@ -20,7 +20,6 @@ namespace EndlessRoad
             )
         {
             IFireable instance = (IFireable)_objectPool.ReuseComponent(_ammo.gameObject, startPoint, Quaternion.LookRotation(forwardDirection));
-
             Vector3 direction = GetSpreadForProjectile(forwardDirection, spread);
             instance.ActivateAmmo();
             if (Physics.Raycast(

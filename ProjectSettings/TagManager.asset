@@ -17,8 +17,8 @@ TagManager:
   - Enemy
   - Obstacle
   - Player
-  - 
-  - 
+  - Weapon
+  - Enemy/BodyPart
   - 
   - 
   - 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun_Saiga
   m_EditorClassIdentifier: 
   Type: 1
-  WeaponViewPrefab: {fileID: 2505533092745178599, guid: db6ab9953e9766542b161b36265e1c55, type: 3}
+  WeaponViewPrefab: {fileID: 4937827369001139919, guid: db6ab9953e9766542b161b36265e1c55, type: 3}
   ReloadTime: 0.2
   Name: SAIGA
   Damage: 15

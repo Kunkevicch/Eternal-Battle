@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun_DoubleBarrelShotgun
   m_EditorClassIdentifier: 
   Type: 1
-  WeaponViewPrefab: {fileID: 2505533092745178599, guid: bb6d914b077238246a6d5de3028edf26, type: 3}
+  WeaponViewPrefab: {fileID: 4937827369001139919, guid: bb6d914b077238246a6d5de3028edf26, type: 3}
   ReloadTime: 0.1
   Name: Shotgun
   Damage: 15

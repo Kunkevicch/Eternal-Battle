@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun_Revolver
   m_EditorClassIdentifier: 
   Type: 0
-  WeaponViewPrefab: {fileID: 1942508306435608442, guid: b55826cf06291a94c983452e907d0d4c, type: 3}
+  WeaponViewPrefab: {fileID: 8986638135909375058, guid: b55826cf06291a94c983452e907d0d4c, type: 3}
   ReloadTime: 0.5
   Name: Pistol
   Damage: 100

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun_AssaultRifle
   m_EditorClassIdentifier: 
   Type: 0
-  WeaponViewPrefab: {fileID: 9220200893802529539, guid: 0928ce5118160c344b27448f00bc3c3d, type: 3}
+  WeaponViewPrefab: {fileID: 1853060936267108395, guid: 0928ce5118160c344b27448f00bc3c3d, type: 3}
   ReloadTime: 0.5
   Name: Assault
   Damage: 0

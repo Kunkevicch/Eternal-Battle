@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun_SniperRiffleW
   m_EditorClassIdentifier: 
   Type: 0
-  WeaponViewPrefab: {fileID: 3940067085408423540, guid: 5f02b7e95e467934eb47096f511afbab, type: 3}
+  WeaponViewPrefab: {fileID: 8245205796510842976, guid: 5f02b7e95e467934eb47096f511afbab, type: 3}
   ReloadTime: 1
   Name: Sniper Riffle W
   Damage: 150

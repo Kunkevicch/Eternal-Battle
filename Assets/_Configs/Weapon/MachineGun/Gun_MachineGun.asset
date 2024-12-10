@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun_MachineGun
   m_EditorClassIdentifier: 
   Type: 0
-  WeaponViewPrefab: {fileID: 3713518288051139361, guid: d78d1189a6ed5df448d901b228f76f5e, type: 3}
+  WeaponViewPrefab: {fileID: 6181982081232936969, guid: d78d1189a6ed5df448d901b228f76f5e, type: 3}
   ReloadTime: 1.5
   Name: Machine Gun
   Damage: 25

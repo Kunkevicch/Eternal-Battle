@@ -38,5 +38,7 @@ namespace EndlessRoad
                 return;
             CurrentHealth -= damage;
         }
+
+        public void Revive() => _currentHealth = _maxHealth;
     }
 }

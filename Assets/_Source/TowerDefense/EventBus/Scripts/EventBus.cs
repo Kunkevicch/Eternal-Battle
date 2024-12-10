@@ -4,8 +4,8 @@ namespace EndlessRoad
 {
     public class EventBus
     {
-        public event Action<string, string> AmmoChanged;
+        public event Action<int> EnemyDied;
 
-        public void RaiseAmmoChanged(string ammoInClip, string ammoCurrent) => AmmoChanged?.Invoke(ammoInClip, ammoCurrent);
+        public void RaiseEnemyDied(int id) => EnemyDied?.Invoke(id);
     }
 }

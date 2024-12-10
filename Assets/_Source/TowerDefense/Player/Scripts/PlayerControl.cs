@@ -10,7 +10,7 @@ namespace EndlessRoad.Shooter
         [SerializeField] private float _jumpHeight;
         [SerializeField] private float _moveSpeed;
         [SerializeField] private CinemachineCamera _camera;
-        [SerializeField] private PlayerWeaponHolderConfig _weaponHolderConfig;
+        
 
         private WeaponHolder _weaponHolder;
 
@@ -42,11 +42,6 @@ namespace EndlessRoad.Shooter
             _playerInput = new();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-        }
-
-        private void Start()
-        {
-            _weaponHolderConfig.SpawnWeaponInHolder(_weaponHolder, _test);
         }
 
         private void OnEnable()

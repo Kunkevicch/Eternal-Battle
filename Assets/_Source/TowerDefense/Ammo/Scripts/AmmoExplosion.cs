@@ -44,7 +44,7 @@ namespace EndlessRoad
         private void SetExplosionSize()
         {
             var mainModule = _explosionFX.main;
-            mainModule.startSize = _damageRadius * 2;
+            mainModule.startSize = _damageRadius * 4;
             mainModule.startSpeed = _damageRadius;
         }
 
@@ -56,15 +56,14 @@ namespace EndlessRoad
             var hittedEnemies = _hits.Where(x => x != null).ToList();
             _explosionFX.gameObject.SetActive(true);
             //_impulseSource.GenerateImpulse();
-            while (hittedEnemies.Count > 0)
+            
+            foreach (var hittedEnemy in hittedEnemies)
             {
-                var hittedEnemy = hittedEnemies.Last();
                 if (hittedEnemy.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.ApplyDamage(_damage);
                 }
-                hittedEnemies.Remove(hittedEnemy);
-                yield return null;
+                //yield return null;
             }
 
             while (_explosionFX.isPlaying)
@@ -73,11 +72,6 @@ namespace EndlessRoad
             }
 
             gameObject.SetActive(false);
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.DrawWireSphere(transform.position, _damageRadius);
         }
     }
 }
