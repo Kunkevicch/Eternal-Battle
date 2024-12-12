@@ -8,6 +8,7 @@ namespace EndlessRoad
         [SerializeField] private float _rageDuration;
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _rageMoveSpeed;
+        [SerializeField] private GameObject _rageEyes;
 
         private bool _canAttack = true;
         private float _moveSpeedTemp;
@@ -46,6 +47,7 @@ namespace EndlessRoad
             _berserkRage.Revive();
             _canAttack = true;
             _health.SetMinimalHealth(1);
+            _rageEyes.SetActive(false);
             base.Revive();
         }
 
@@ -67,6 +69,7 @@ namespace EndlessRoad
         }
         public void RageComplete()
         {
+            _rageEyes.SetActive(true);
             _moveSpeedTemp = _moveSpeed;
             _moveSpeed = _rageMoveSpeed;
 
@@ -79,6 +82,7 @@ namespace EndlessRoad
 
         private void OnRageEnded()
         {
+            _rageEyes.SetActive(false);
             _health.SetMinimalHealth(0);
             _moveSpeed = _moveSpeedTemp;
             _animator.SetFloatParamValue("AnimationSpeed", 1);
