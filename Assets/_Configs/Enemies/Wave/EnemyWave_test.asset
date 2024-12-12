@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _waves:
   - Enemies:
-    - Count: 1
-      Enemy: {fileID: 4413511987286374030, guid: 6d39dd25899b2774ebff2e88d1566eea, type: 3}
+    - Count: 20
+      Enemy: {fileID: 5161421762073948511, guid: 26bb8976f4984e9409f0cafb253cf85d, type: 3}

@@ -41,7 +41,6 @@ public partial class AimToPlayerAction : Action
         lookRotation = Quaternion.Euler(eulerAngles);
 
         Self.Value.transform.rotation = Quaternion.Slerp(Self.Value.transform.rotation, lookRotation, Time.deltaTime * 5f);
-
     }
 }
 

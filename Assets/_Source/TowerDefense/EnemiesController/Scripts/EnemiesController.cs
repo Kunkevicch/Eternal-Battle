@@ -44,6 +44,7 @@ namespace EndlessRoad
 
         private IEnumerator SpawnEnemiesRoutine()
         {
+            yield return new WaitForSeconds(5f);
             var currentWave = _waves.Waves[Random.Range(0, _waves.Waves.Count - 1)];
             int enemyId = 0;
             while (_activeEnemies.Count < currentWave.EnemiesCount)

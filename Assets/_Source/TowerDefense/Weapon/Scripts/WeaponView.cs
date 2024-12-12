@@ -34,9 +34,7 @@ namespace EndlessRoad
         protected bool _isAim;
         protected bool _isReloading;
 
-        protected ShootRaycastStrategyBase _shootStrategy;
-
-        
+        protected ShootRaycastStrategyBase AttackStrategy;
 
         public event Action WeaponReloaded;
 
@@ -80,6 +78,18 @@ namespace EndlessRoad
             else
             {
                 canAttack = false;
+                _stopAttackTime = Time.time;
+            }
+        }
+
+        public void Tick(bool wantsToAttack)
+        {
+            if (wantsToAttack)
+            {
+                Attack();
+            }
+            else
+            {
                 _stopAttackTime = Time.time;
             }
         }

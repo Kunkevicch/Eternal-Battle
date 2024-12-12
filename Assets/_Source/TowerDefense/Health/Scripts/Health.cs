@@ -9,6 +9,8 @@ namespace EndlessRoad
         [field: SerializeField] public ImpactEffect ImpactPrefab { get; set; }
         [SerializeField] protected int _currentHealth;
 
+        private int _minimalHealth;
+
         private void Awake()
         {
             _currentHealth = _maxHealth;
@@ -23,8 +25,8 @@ namespace EndlessRoad
             get => _currentHealth;
             set
             {
-                _currentHealth = Mathf.Clamp(value, 0, MaxHealth);
-                
+                _currentHealth = Mathf.Clamp(value, _minimalHealth, MaxHealth);
+
                 if (_currentHealth == 0)
                 {
                     Dead?.Invoke();
@@ -40,5 +42,8 @@ namespace EndlessRoad
         }
 
         public void Revive() => _currentHealth = _maxHealth;
+
+        public void SetMinimalHealth(int newMinimalHealth) => _minimalHealth = Mathf.Clamp(newMinimalHealth, 0, _maxHealth);
+
     }
 }

@@ -10,7 +10,6 @@ namespace EndlessRoad.Shooter
         [SerializeField] private float _jumpHeight;
         [SerializeField] private float _moveSpeed;
         [SerializeField] private CinemachineCamera _camera;
-        
 
         private WeaponHolder _weaponHolder;
 

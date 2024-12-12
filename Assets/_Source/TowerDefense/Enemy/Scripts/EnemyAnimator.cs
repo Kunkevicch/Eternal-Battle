@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace EndlessRoad
@@ -9,7 +10,6 @@ namespace EndlessRoad
         protected Animator _animator;
         protected WeaponViewIK _weaponIK;
         protected RagdollHelper _ragdollHelper;
-
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -23,6 +23,8 @@ namespace EndlessRoad
             Revive();
         }
 
+        public Action AttackEnded;
+
         public virtual void Revive()
         {
             _animator.enabled = true;
@@ -30,6 +32,8 @@ namespace EndlessRoad
             _ragdollHelper.Disable();
             PlayIdle();
         }
+
+        public void SetFloatParamValue(string paramName, float value) => _animator.SetFloat(paramName, value);
 
         public void PlayClipWithName(string clipName) => _animator.Play(clipName);
         public virtual void PlayIdle() => _animator.SetBool("IsFire", false);
@@ -49,6 +53,5 @@ namespace EndlessRoad
         }
 
         protected virtual void RefreshAnimator() => _animator.Rebind();
-
     }
 }

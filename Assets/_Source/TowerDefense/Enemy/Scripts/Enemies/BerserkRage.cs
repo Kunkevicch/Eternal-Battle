@@ -26,5 +26,11 @@ namespace EndlessRoad
             _isBerserk = false;
             rageEndCallback();
         }
+
+        public void Revive()
+        {
+            _isBerserk = false;
+            _canRage = true;
+        }
     }
 }

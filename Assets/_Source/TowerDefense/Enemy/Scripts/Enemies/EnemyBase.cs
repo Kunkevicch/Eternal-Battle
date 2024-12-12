@@ -37,14 +37,14 @@ namespace EndlessRoad
         public LayerMask VisiubleLayer => _visiubleLayer;
         public bool IsDead { get; private set; }
 
-        private void OnEnable() => _health.Dead += OnDead;
+        protected virtual void OnEnable() => _health.Dead += OnDead;
 
-        private void OnDisable() => _health.Dead -= OnDead;
+        protected virtual void OnDisable() => _health.Dead -= OnDead;
 
         public void SetID(int id) => _id = id;
         public void SetPlayer(GameObject player) => _agent.SetVariableValue("Player", player);
 
-        public void Revive()
+        public virtual void Revive()
         {
             _health.Revive();
             _animator.Revive();

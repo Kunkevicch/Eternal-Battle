@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 
 namespace EndlessRoad
@@ -22,16 +21,32 @@ namespace EndlessRoad
             base.Awake();
             _berserkRage = new BerserkRage(_rageDuration);
         }
-        private IEnumerator Start()
+
+        protected override void OnEnable()
         {
-            yield return new WaitForSeconds(5f);
-            Initialize();
+            base.OnEnable();
+            _animator.AttackEnded += OnAttackEnded;
+
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            _animator.AttackEnded -= OnAttackEnded;
         }
         public override void Initialize()
         {
             _combat.Initialize(_weaponConfig);
             _animator.Initalize();
             _agent.enabled = true;
+        }
+
+        public override void Revive()
+        {
+            _berserkRage.Revive();
+            _canAttack = true;
+            _health.SetMinimalHealth(1);
+            base.Revive();
         }
 
         public float MoveSpeed => _moveSpeed;
@@ -54,15 +69,19 @@ namespace EndlessRoad
         {
             _moveSpeedTemp = _moveSpeed;
             _moveSpeed = _rageMoveSpeed;
+
             _rageCallback();
-            StartCoroutine(_berserkRage.RageRoutine(() => OnRageEnd()));
+            _animator.SetFloatParamValue("AnimationSpeed", 2);
+            StartCoroutine(_berserkRage.RageRoutine(() => OnRageEnded()));
         }
 
-        public void AttackComplete() => _canAttack = true;
+        private void OnAttackEnded() => _canAttack = true;
 
-        private void OnRageEnd()
+        private void OnRageEnded()
         {
+            _health.SetMinimalHealth(0);
             _moveSpeed = _moveSpeedTemp;
+            _animator.SetFloatParamValue("AnimationSpeed", 1);
             _rageOverCallback();
         }
 

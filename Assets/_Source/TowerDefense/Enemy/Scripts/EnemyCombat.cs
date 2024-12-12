@@ -4,7 +4,7 @@ namespace EndlessRoad
 {
     public class EnemyCombat : MonoBehaviour
     {
-        private WeaponView _currentWeapon;
+        protected WeaponView _currentWeapon;
         private WeaponViewIK _currentWeaponIK;
 
         public WeaponViewIK Initialize(WeaponConfig weaponConfig)
@@ -15,7 +15,7 @@ namespace EndlessRoad
             return _currentWeaponIK;
         }
 
-        public void Attack()
+        public virtual void Attack()
         {
             _currentWeapon.Tick(true, out bool canshoot);
             if (!canshoot)

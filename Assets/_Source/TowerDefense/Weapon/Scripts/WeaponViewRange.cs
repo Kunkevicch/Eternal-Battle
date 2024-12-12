@@ -31,7 +31,7 @@ namespace EndlessRoad
             _fireRate = weaponConfig.ShootConfiguration.FireRate;
             _reloadTime = weaponConfig.ReloadTime;
             _damage = weaponConfig.Damage;
-            _shootStrategy = shootStrategy;
+            AttackStrategy = shootStrategy;
         }
 
         protected override void Attack()
@@ -64,7 +64,7 @@ namespace EndlessRoad
                     return;
                 }
 
-                _shootStrategy.Shoot(
+                AttackStrategy.Shoot(
                     GetForwardDirection()
                     , _muzzleParticle.transform.position
                     , GetCurrentSpread()
