@@ -181,8 +181,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5205636048416209138}
-  - component: {fileID: 4212899940907080504}
   - component: {fileID: 7519284717449291800}
+  - component: {fileID: 5062320289238753191}
   m_Layer: 0
   m_Name: RocketLauncher
   m_TagString: Untagged
@@ -207,19 +207,6 @@ Transform:
   - {fileID: 8460883714083951641}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4212899940907080504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5202890646463299662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e07d040c1945ce542b75079493e11809, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _weaponTransform: {fileID: 8460883714083951641}
 --- !u!82 &7519284717449291800
 AudioSource:
   m_ObjectHideFlags: 0
@@ -317,6 +304,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5062320289238753191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5202890646463299662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c66e363a3e7d7814fb58cf68e659e225, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponTransform: {fileID: 8460883714083951641}
 --- !u!1 &5967335800960018942
 GameObject:
   m_ObjectHideFlags: 0

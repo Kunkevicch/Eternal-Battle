@@ -9,6 +9,7 @@ namespace EndlessRoad
     {
         [SerializeField] private Transform _handTransform;
         [SerializeField] private Transform _animatorTransform;
+        [SerializeField] private PlayerWeaponHolderConfig _weaponHolderConfig;
 
         private List<WeaponView> _weapons = new();
         private Dictionary<WeaponView, AnimatorOverrideController> _animators = new();
@@ -23,6 +24,11 @@ namespace EndlessRoad
         private WeaponView _activeWeapon;
 
         private CurrentAmmoInformer _currentAmmoInformer;
+
+        public void InitializeWeapons()
+        {
+            _weaponHolderConfig.SpawnWeaponInHolder(this);
+        }
 
         private void Awake()
         {
@@ -109,7 +115,7 @@ namespace EndlessRoad
 
             _handTransform.localPosition = _activeWeapon.SpawnPoint;
             _handTransform.localRotation = Quaternion.Euler(_activeWeapon.SpawnRotation);
-            
+
             _animator.SetAnimatorController(_animators[_activeWeapon]);
             _animator.PlayEquip();
 

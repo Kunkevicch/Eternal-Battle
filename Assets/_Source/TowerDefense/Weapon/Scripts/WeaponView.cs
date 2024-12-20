@@ -4,69 +4,37 @@ using UnityEngine;
 
 namespace EndlessRoad
 {
-    public class WeaponView : MonoBehaviour
+    public abstract class WeaponView : MonoBehaviour
     {
         [SerializeField] private Transform _weaponTransform;
 
-        private bool _isPlayerWeapon;
+        protected bool _isPlayerWeapon;
+        protected WeaponAmmo _weaponAmmo;
 
-        private Animator _animator;
-        private WeaponStats _stats;
-        private WeaponAmmo _weaponAmmo;
+        protected LayerMask _impactMask;
+        protected AudioSource _audioSource;
+        protected Vector3 _spawnPoint;
+        protected Vector3 _spawnRotation;
+        protected Vector3 _aimPoint;
+        protected Vector3 _aimRotation;
 
-        private LayerMask _impactMask;
-        private AudioSource _audioSource;
-        private Vector3 _spawnPoint;
-        private Vector3 _spawnRotation;
-        private Vector3 _aimPoint;
-        private Vector3 _aimRotation;
+        protected float _reloadTime;
+        protected float _fireRate;
+        protected int _damage;
 
-        private float _reloadTime;
-        private float _fireRate;
-        private int _damage;
+        protected WeaponConfig _weaponConfiguration;
+        protected WeaponAudioConfig _audioConfig;
+        protected ParticleSystem _muzzleParticle;
 
-        private ParticleSystem _muzzleParticle;
-        private WeaponConfig _weaponConfiguration;
-        private WeaponAudioConfig _audioConfig;
+        protected float _lastAttackTime;
+        protected float _initialClickedTime;
+        protected float _stopAttackTime;
 
-        private float _lastShootTime;
-        private float _initialClickedTime;
-        private float _stopShootingTime;
+        protected bool _isMove;
+        protected bool _isAim;
+        protected bool _isReloading;
 
-        private bool _isMove;
-        private bool _isAim;
-        private bool _isReloading;
-
-        private ShootRaycastStrategyBase _shootStrategy;
-
-        public void Initialize(
-            LayerMask impactMask
-            , WeaponConfig weaponConfig
-            , ShootRaycastStrategyBase shootStrategy
-            )
-        {
-            _stats = new();
-            _weaponAmmo = new(weaponConfig.WeaponAmmoConfig.MaxAmmo, weaponConfig.WeaponAmmoConfig.ClipSize);
-
-            _audioConfig = weaponConfig.WeaponAudioConfig;
-
-            _audioSource = GetComponent<AudioSource>();
-            _animator = GetComponentInChildren<Animator>();
-            _muzzleParticle = GetComponentInChildren<ParticleSystem>();
-
-            _spawnPoint = weaponConfig.SpawnPoint;
-            _spawnRotation = weaponConfig.SpawnRotation;
-
-            _aimPoint = weaponConfig.AimPoint;
-            _aimRotation = weaponConfig.AimRotation;
-
-            _impactMask = impactMask;
-            _weaponConfiguration = weaponConfig;
-            _fireRate = weaponConfig.ShootConfiguration.FireRate;
-            _reloadTime = weaponConfig.ReloadTime;
-            _damage = weaponConfig.Damage;
-            _shootStrategy = shootStrategy;
-        }
+        protected ShootRaycastStrategyBase AttackStrategy;
 
         public event Action WeaponReloaded;
 
@@ -85,40 +53,12 @@ namespace EndlessRoad
         public void SetAimPosition(bool isAim)
         {
             _isAim = isAim;
-            //StopCoroutine(SetAimPositionRoutine());
-            //StartCoroutine(SetAimPositionRoutine());
         }
-
-        //private IEnumerator SetAimPositionRoutine()
-        //{
-        //    float startTime = Time.time;
-        //    Vector3 startPosition = transform.localPosition;
-
-        //    if (_isAim)
-        //    {
-        //        float t = 0;
-        //        while (t < 1f)
-        //        {
-        //            t = (Time.time - startTime) / 0.2f;
-        //            transform.localPosition = Vector3.Lerp(startPosition, _aimPoint, t);
-        //            yield return null;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        float t = 0;
-        //        while (t < 1f)
-        //        {
-        //            t = (Time.time - startTime) / 0.2f;
-        //            transform.localPosition = Vector3.Lerp(startPosition, _spawnPoint, t);
-        //            yield return null;
-        //        }
-        //    }
-        //}
 
         public void SetWeaponForPlayer(bool isPlayerWeapon)
         {
             _isPlayerWeapon = isPlayerWeapon;
+            _weaponAmmo.SetAmmoForPlayer(isPlayerWeapon);
         }
 
         private void OnEnable()
@@ -126,32 +66,32 @@ namespace EndlessRoad
             if (_isPlayerWeapon)
             {
                 _audioConfig?.PlayEquipClip(_audioSource);
-                //_animator?.Play("Equip");
             }
         }
 
-        private void OnDisable()
+        public virtual void Tick(bool wantsToAttack, out bool canAttack)
         {
-            if (_isPlayerWeapon)
+            if (wantsToAttack)
             {
-                //_weaponTransform.localEulerAngles = Vector3.zero;
-                //_weaponTransform.localPosition = Vector3.zero;
-                _isReloading = false;
-            }
-        }
-
-
-        public void Tick(bool wantsToShoot, out bool canshoot)
-        {
-            if (wantsToShoot)
-            {
-                canshoot = CanShoot();
-                Shoot();
+                canAttack = CanAttack();
+                Attack();
             }
             else
             {
-                canshoot = false;
-                _stopShootingTime = Time.time;
+                canAttack = false;
+                _stopAttackTime = Time.time;
+            }
+        }
+
+        public virtual void Tick(bool wantsToAttack)
+        {
+            if (wantsToAttack)
+            {
+                Attack();
+            }
+            else
+            {
+                _stopAttackTime = Time.time;
             }
         }
 
@@ -167,7 +107,7 @@ namespace EndlessRoad
                 , _isMove
                 );
 
-        public void StartReload()
+        public virtual void StartReload()
         {
             if (!_weaponAmmo.CanReload() || _isReloading)
                 return;
@@ -176,62 +116,8 @@ namespace EndlessRoad
         }
 
 
-        private void Shoot()
-        {
-            if (_isReloading)
-                return;
 
-            if (Time.time - _lastShootTime - _fireRate > Time.deltaTime)
-            {
-                float lastDuration = Mathf.Clamp(
-                    0
-                    , (_stopShootingTime - _initialClickedTime)
-                    , _weaponConfiguration.ShootConfiguration.MaxSpreadTime
-                    );
-                float lerpTime = (_weaponConfiguration.ShootConfiguration.RecoilRecoverySpeed - (Time.time - _stopShootingTime)) / _weaponConfiguration.ShootConfiguration.RecoilRecoverySpeed;
-                _initialClickedTime = Time.time - Mathf.Lerp(0, lastDuration, Mathf.Clamp01(lerpTime));
-            }
-
-            if (CanShoot())
-            {
-                _lastShootTime = Time.time;
-
-                if (_weaponAmmo.IsEmpty())
-                {
-                    if (_isPlayerWeapon)
-                    {
-                        _audioConfig.PlayEmptyClip(_audioSource);
-                    }
-
-                    return;
-                }
-
-                _shootStrategy.Shoot(
-                    GetForwardDirection()
-                    , _muzzleParticle.transform.position
-                    , GetCurrentSpread()
-                    , _weaponConfiguration.TrailConfiguration.SimulationSpeed
-                    , _weaponConfiguration.TrailConfiguration.Duration
-                    , _damage
-                    , _impactMask
-                    , _weaponConfiguration.TrailConfiguration.MissDistance
-                    );
-
-                _audioConfig.PlayShootingClip(_audioSource);
-
-                if (_isPlayerWeapon)
-                {
-                    //_animator?.Play("Fire");
-                }
-
-                _weaponAmmo.DecreaseAmmo();
-
-                _muzzleParticle.Play();
-
-            }
-        }
-
-        private bool CanShoot() => Time.time > _fireRate + _lastShootTime;
+        protected bool CanAttack() => Time.time > _fireRate + _lastAttackTime;
 
         private IEnumerator ReloadRoutine()
         {
@@ -255,5 +141,13 @@ namespace EndlessRoad
             _isReloading = false;
             WeaponReloaded?.Invoke();
         }
+
+        public abstract void Initialize(
+            LayerMask impactMask
+            , WeaponConfig weaponConfig
+            , ShootRaycastStrategyBase shootStrategy
+            );
+        protected abstract void Attack();
     }
+
 }

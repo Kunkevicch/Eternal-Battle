@@ -5,6 +5,7 @@ using Zenject;
 public class ShooterGameInstaller : MonoInstaller
 {
     [SerializeField] private ObjectForPooling _poolingObjects;
+    [SerializeField] private InitializingWeapons _initializingWeapons;
 
     public override void InstallBindings()
     {
@@ -23,6 +24,16 @@ public class ShooterGameInstaller : MonoInstaller
 
         Container.BindInterfacesAndSelfTo<WeaponHolder>()
             .FromComponentInHierarchy()
+            .AsSingle()
+            .NonLazy();
+
+        Container.BindInterfacesAndSelfTo<EnemiesController>()
+            .FromComponentInHierarchy()
+            .AsSingle()
+            .NonLazy();
+
+        Container.BindInterfacesAndSelfTo<InitializingWeapons>()
+            .FromScriptableObject(_initializingWeapons)
             .AsSingle()
             .NonLazy();
     }

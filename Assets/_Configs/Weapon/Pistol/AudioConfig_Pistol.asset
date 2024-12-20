@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
   m_Name: AudioConfig_Pistol
   m_EditorClassIdentifier: 
-  Volume: 0.392
+  MinVolume: 0.3
+  MaxVolume: 0.5
   FireClips:
   - {fileID: 8300000, guid: 6ec02f0ea597ab240a58da7b665df0ac, type: 3}
   - {fileID: 8300000, guid: b72389e19e813ac41b682f5eb18fd1fd, type: 3}

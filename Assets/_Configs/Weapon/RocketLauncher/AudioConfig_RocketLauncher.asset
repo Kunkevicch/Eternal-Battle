@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
   m_Name: AudioConfig_RocketLauncher
   m_EditorClassIdentifier: 
-  Volume: 0
+  MinVolume: 0.3
+  MaxVolume: 0.5
   FireClips: []
   EquipClips: []
   EmptyClip: {fileID: 0}

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
   m_Name: AudioConfig_Revolver
   m_EditorClassIdentifier: 
-  Volume: 0.392
+  MinVolume: 0.3
+  MaxVolume: 0.5
   FireClips:
   - {fileID: 8300000, guid: 74761a48ac719444bbda31bbd40561e7, type: 3}
   - {fileID: 8300000, guid: 237523b1ec2fef947afd8891fcaf5b42, type: 3}

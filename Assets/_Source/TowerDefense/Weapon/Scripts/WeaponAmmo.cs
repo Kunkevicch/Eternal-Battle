@@ -10,9 +10,12 @@ namespace EndlessRoad
         private int _currentAmmo;
         private int _currentClipAmmo;
 
+        private bool _isPlayerAmmo;
+
         public WeaponAmmo(
             int maxAmmo
             , int clipSize
+            , bool isPlayerAmmo
             )
         {
             _maxAmmo = maxAmmo;
@@ -20,6 +23,8 @@ namespace EndlessRoad
 
             _currentAmmo = _maxAmmo;
             _currentClipAmmo = _clipSize;
+
+            _isPlayerAmmo = isPlayerAmmo;
         }
 
         public int MaxAmmo => _maxAmmo;
@@ -40,6 +45,8 @@ namespace EndlessRoad
 
         public void DecreaseAmmo() => CurrentClipAmmo--;
 
+        public void SetAmmoForPlayer(bool value) => _isPlayerAmmo = value;
+
         public void Reload()
         {
             int maxReloadAmount = Mathf.Min(_clipSize, _currentAmmo);
@@ -47,7 +54,10 @@ namespace EndlessRoad
             int reloadAmmo = Mathf.Min(maxReloadAmount, availableBulletInCurrentClip);
 
             _currentClipAmmo += reloadAmmo;
-            _currentAmmo -= reloadAmmo;
+            if (_isPlayerAmmo)
+            {
+                _currentAmmo -= reloadAmmo;
+            }
         }
 
         public bool CanReload() => _currentClipAmmo < _clipSize && _currentAmmo > 0;

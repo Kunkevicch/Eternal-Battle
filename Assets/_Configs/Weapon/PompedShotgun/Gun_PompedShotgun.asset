@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun_PompedShotgun
   m_EditorClassIdentifier: 
   Type: 1
-  WeaponViewPrefab: {fileID: 2505533092745178599, guid: 2569ac8d302b52448921b93df11544bb, type: 3}
+  WeaponViewPrefab: {fileID: 4937827369001139919, guid: 2569ac8d302b52448921b93df11544bb, type: 3}
   ReloadTime: 0.5
   Name: Shotgun
   Damage: 15
