@@ -10,15 +10,13 @@ namespace EndlessRoad
         [SerializeField] private EnemyWaveConfig _waves;
         [SerializeField] private Transform _spawnPoint;
         [SerializeField] private GameObject _player;
-        [SerializeField] private int _count;
+
         private Dictionary<int, EnemyBase> _activeEnemies = new();
 
         private EventBus _eventBus;
         private ObjectPool _objectPool;
 
         private bool _isNeedNextWave = true;
-
-        private Coroutine _spawnCoroutine;
 
         [Inject]
         public void Construct(EventBus eventBus, ObjectPool objectPool)
@@ -71,7 +69,6 @@ namespace EndlessRoad
                 }
                 yield return null;
             }
-            _count = _activeEnemies.Count;
         }
 
         private void OnEnemyDied(int id)
@@ -80,7 +77,6 @@ namespace EndlessRoad
                 return;
 
             _activeEnemies.Remove(id);
-            _count = _activeEnemies.Count;
             if (_activeEnemies.Count == 0)
             {
                 StartCoroutine(SpawnEnemiesRoutine());

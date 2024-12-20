@@ -48,6 +48,18 @@ namespace EndlessRoad
             return weaponView;
         }
 
+        public WeaponView InitializeWeapon(WeaponView weapon)
+        {
+            ShootRaycastStrategyBase shootStrategy = GetShootStrategyByWeaponType();
+            weapon.Initialize(
+                ShootConfiguration.ImpactMask
+                , this
+                , shootStrategy
+                );
+
+            return weapon;
+        }
+
         private ShootRaycastStrategyBase GetShootStrategyByWeaponType()
         {
             switch (Type)

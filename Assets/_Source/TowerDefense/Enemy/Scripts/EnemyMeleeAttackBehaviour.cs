@@ -4,10 +4,10 @@ namespace EndlessRoad
 {
     public class EnemyMeleeAttackBehaviour : StateMachineBehaviour
     {
-        private EnemyAnimator _enemyAnimator;
+        private EnemyAnimatorBase _enemyAnimator;
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            _enemyAnimator ??= animator.GetComponent<EnemyAnimator>();
+            _enemyAnimator ??= animator.GetComponent<EnemyAnimatorBase>();
             _enemyAnimator.AttackEnded?.Invoke();
         }
     }

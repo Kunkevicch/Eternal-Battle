@@ -58,6 +58,7 @@ namespace EndlessRoad
         public void SetWeaponForPlayer(bool isPlayerWeapon)
         {
             _isPlayerWeapon = isPlayerWeapon;
+            _weaponAmmo.SetAmmoForPlayer(isPlayerWeapon);
         }
 
         private void OnEnable()
@@ -68,7 +69,7 @@ namespace EndlessRoad
             }
         }
 
-        public void Tick(bool wantsToAttack, out bool canAttack)
+        public virtual void Tick(bool wantsToAttack, out bool canAttack)
         {
             if (wantsToAttack)
             {
@@ -82,7 +83,7 @@ namespace EndlessRoad
             }
         }
 
-        public void Tick(bool wantsToAttack)
+        public virtual void Tick(bool wantsToAttack)
         {
             if (wantsToAttack)
             {
@@ -106,7 +107,7 @@ namespace EndlessRoad
                 , _isMove
                 );
 
-        public void StartReload()
+        public virtual void StartReload()
         {
             if (!_weaponAmmo.CanReload() || _isReloading)
                 return;
@@ -115,7 +116,7 @@ namespace EndlessRoad
         }
 
 
-        
+
         protected bool CanAttack() => Time.time > _fireRate + _lastAttackTime;
 
         private IEnumerator ReloadRoutine()

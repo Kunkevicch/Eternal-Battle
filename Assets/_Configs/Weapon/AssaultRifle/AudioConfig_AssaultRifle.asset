@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
   m_Name: AudioConfig_AssaultRifle
   m_EditorClassIdentifier: 
-  Volume: 0.112
+  MinVolume: 0.3
+  MaxVolume: 0.5
   FireClips:
   - {fileID: 8300000, guid: 7895ef45073487d4caaf84c4c7109a7f, type: 3}
   EquipClips:

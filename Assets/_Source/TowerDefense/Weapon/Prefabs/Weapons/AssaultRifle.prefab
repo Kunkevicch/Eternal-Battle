@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2358534884114525677}
+  - component: {fileID: 7814336350505862833}
   m_Layer: 0
   m_Name: LeftHandPosition
   m_TagString: Untagged
@@ -25,12 +26,24 @@ Transform:
   m_GameObject: {fileID: 1504822224578570470}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0, z: -0.9986323, w: -0.052283544}
-  m_LocalPosition: {x: -0.039, y: -0.02, z: 0.289}
+  m_LocalPosition: {x: -0.0369, y: -0.0007, z: 0.289}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6774639892199040115}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -185.994}
+--- !u!114 &7814336350505862833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504822224578570470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8086292994495397006
 GameObject:
   m_ObjectHideFlags: 0
@@ -40,6 +53,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8393069354108316451}
+  - component: {fileID: 8906308793026248732}
   m_Layer: 0
   m_Name: RightHandPosition
   m_TagString: Untagged
@@ -56,12 +70,24 @@ Transform:
   m_GameObject: {fileID: 8086292994495397006}
   serializedVersion: 2
   m_LocalRotation: {x: 0.4900659, y: -0.6642662, z: 0.3487682, w: 0.44378665}
-  m_LocalPosition: {x: 0.0507, y: -0.0157, z: -0.0983}
+  m_LocalPosition: {x: 0.0408, y: -0.0426, z: -0.0248}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6774639892199040115}
   m_LocalEulerAnglesHint: {x: 63.938, y: -145.674, z: -51.016}
+--- !u!114 &8906308793026248732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8086292994495397006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &164274838309594347
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -318,8 +344,8 @@ MonoBehaviour:
   _leftHandPosition: {fileID: 2358534884114525677}
   _idlePosition: {x: -0.014, y: 0.159, z: -0.154}
   _idleRotation: {x: 339.64398, y: 248.24576, z: 190.72752}
-  _firingPosition: {x: -0.255, y: 0.11, z: -0.25}
-  _firingRotation: {x: 5.7669525, y: 254.16391, z: 197.5522}
+  _firingPosition: {x: -0.071, y: 0.187, z: -0.201}
+  _firingRotation: {x: 1.4281006, y: 258.5757, z: 197.84909}
 --- !u!54 &1763925929948445602
 Rigidbody:
   m_ObjectHideFlags: 0

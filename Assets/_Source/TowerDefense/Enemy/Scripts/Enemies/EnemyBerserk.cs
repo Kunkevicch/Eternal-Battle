@@ -10,9 +10,10 @@ namespace EndlessRoad
         [SerializeField] private float _rageMoveSpeed;
         [SerializeField] private GameObject _rageEyes;
 
-        private bool _canAttack = true;
+        
         private float _moveSpeedTemp;
         private BerserkRage _berserkRage;
+        private AudioSource _rageAudio;
 
         private Action _rageCallback;
         private Action _rageOverCallback;
@@ -21,13 +22,13 @@ namespace EndlessRoad
         {
             base.Awake();
             _berserkRage = new BerserkRage(_rageDuration);
+            _rageAudio = GetComponent<AudioSource>();
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
             _animator.AttackEnded += OnAttackEnded;
-
         }
 
         protected override void OnDisable()
@@ -53,8 +54,6 @@ namespace EndlessRoad
 
         public float MoveSpeed => _moveSpeed;
         public bool CanRage => (float)_health.CurrentHealth / _health.MaxHealth <= 0.5f && _berserkRage.CanRage;
-        public bool CanAtack => _canAttack;
-
         public override void CombatProcess()
         {
             _canAttack = false;
@@ -63,6 +62,7 @@ namespace EndlessRoad
 
         public void StartRageProcess(Action rageCompleteCallback, Action rageOverCallback)
         {
+            _rageAudio.Play();
             _rageCallback = rageCompleteCallback;
             _rageOverCallback = rageOverCallback;
             _animator.PlayClipWithName("Rage");

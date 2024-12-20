@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
   m_Name: AudioConfig_Saiga
   m_EditorClassIdentifier: 
-  Volume: 0.392
+  MinVolume: 0.3
+  MaxVolume: 0.5
   FireClips:
   - {fileID: 8300000, guid: a130707dae08c8b4982ef79eb268fb79, type: 3}
   - {fileID: 8300000, guid: 6335062a8b629e14c89a7a5a7192b9da, type: 3}

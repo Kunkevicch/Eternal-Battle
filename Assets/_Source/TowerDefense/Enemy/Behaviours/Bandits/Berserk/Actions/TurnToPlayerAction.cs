@@ -49,9 +49,11 @@ public partial class TurnToPlayerAction : Action
         Vector3 directionToTarget = Player.Value.transform.position - Enemy.Value.transform.position;
 
         directionToTarget.Normalize();
+        Vector3 directionToTargetFlat = new Vector3(directionToTarget.x, 0, directionToTarget.z).normalized;
+        Vector3 enemyForwardFlat = new Vector3(Enemy.Value.transform.forward.x, 0, Enemy.Value.transform.forward.z).normalized;
 
-        float angle = Vector3.Angle(Enemy.Value.transform.forward, directionToTarget);
-        
+        float angle = Vector3.Angle(enemyForwardFlat, directionToTargetFlat);
+
         return angle <= _angleThreshold.Value;
     }
 }

@@ -9,11 +9,11 @@ namespace EndlessRoad
     {
         [SerializeField] protected WeaponConfig _weaponConfig;
         [SerializeField] private LayerMask _visiubleLayer;
-
         private int _id = -1;
 
-        protected EnemyCombat _combat;
-        protected EnemyAnimator _animator;
+        protected bool _canAttack = true;
+        protected EnemyCombatBase _combat;
+        protected EnemyAnimatorBase _animator;
         protected Health _health;
         protected BehaviorGraphAgent _agent;
         protected CapsuleCollider _bodyCollider;
@@ -25,17 +25,19 @@ namespace EndlessRoad
             _eventBus = eventBus;
         }
 
+        public bool CanAtack => _canAttack;
+
+        public LayerMask VisiubleLayer => _visiubleLayer;
+        public bool IsDead { get; private set; }
+
         protected virtual void Awake()
         {
             _health = GetComponent<Health>();
             _bodyCollider = GetComponent<CapsuleCollider>();
-            _animator = GetComponent<EnemyAnimator>();
-            _combat = GetComponent<EnemyCombat>();
+            _animator = GetComponent<EnemyAnimatorBase>();
+            _combat = GetComponent<EnemyCombatBase>();
             _agent = GetComponent<BehaviorGraphAgent>();
         }
-
-        public LayerMask VisiubleLayer => _visiubleLayer;
-        public bool IsDead { get; private set; }
 
         protected virtual void OnEnable() => _health.Dead += OnDead;
 
@@ -43,7 +45,6 @@ namespace EndlessRoad
 
         public void SetID(int id) => _id = id;
         public void SetPlayer(GameObject player) => _agent.SetVariableValue("Player", player);
-
         public virtual void Revive()
         {
             _health.Revive();

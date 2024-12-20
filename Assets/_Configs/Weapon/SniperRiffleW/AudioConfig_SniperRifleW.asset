@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4734b3a1068763d439ef863e872ccba6, type: 3}
   m_Name: AudioConfig_SniperRifleW
   m_EditorClassIdentifier: 
-  Volume: 0.208
+  MinVolume: 0.3
+  MaxVolume: 0.5
   FireClips:
   - {fileID: 8300000, guid: 450d1361160d65b41b6d3c83eaac9875, type: 3}
   - {fileID: 8300000, guid: 33bb5babd40457941823b6093bfd1f0b, type: 3}

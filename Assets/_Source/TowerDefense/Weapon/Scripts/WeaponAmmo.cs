@@ -45,6 +45,8 @@ namespace EndlessRoad
 
         public void DecreaseAmmo() => CurrentClipAmmo--;
 
+        public void SetAmmoForPlayer(bool value) => _isPlayerAmmo = value;
+
         public void Reload()
         {
             int maxReloadAmount = Mathf.Min(_clipSize, _currentAmmo);
