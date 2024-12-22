@@ -41,11 +41,11 @@ MonoBehaviour:
     prefab: {fileID: 1004523049246683751, guid: e380050574dde8b47a11ad1c66cc6a3e, type: 3}
     componentType: EndlessRoad.EnemyBase
     isInjected: 1
-  - poolSize: 1
+  - poolSize: 20
     prefab: {fileID: 5677500698225445880, guid: 6d39dd25899b2774ebff2e88d1566eea, type: 3}
     componentType: EndlessRoad.EnemyBase
     isInjected: 1
-  - poolSize: 1
+  - poolSize: 20
     prefab: {fileID: 5076026146711756563, guid: 1c1f31a4a36233147b8262a9598a37a3, type: 3}
     componentType: EndlessRoad.EnemyBase
     isInjected: 1

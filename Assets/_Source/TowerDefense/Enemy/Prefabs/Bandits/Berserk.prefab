@@ -7451,6 +7451,7 @@ MonoBehaviour:
   _visiubleLayer:
     serializedVersion: 2
     m_Bits: 832
+  _reward: 50
   _rageDuration: 7
   _moveSpeed: 10
   _rageMoveSpeed: 20

@@ -36,5 +36,9 @@ public class ShooterGameInstaller : MonoInstaller
             .FromScriptableObject(_initializingWeapons)
             .AsSingle()
             .NonLazy();
+
+        Container.BindInterfacesAndSelfTo<LevelObserver>()
+            .AsSingle()
+            .Lazy();
     }
 }

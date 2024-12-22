@@ -6,8 +6,8 @@ namespace EndlessRoad
     [Serializable]
     public struct Wave
     {
+        public LevelDifficult WaveDifficult;
         public List<WaveKeyPair> Enemies;
-        
         public int EnemiesCount
         {
             get

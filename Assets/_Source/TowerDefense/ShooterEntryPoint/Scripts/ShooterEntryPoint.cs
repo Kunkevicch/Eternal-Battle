@@ -6,10 +6,14 @@ namespace EndlessRoad
 {
     public class ShooterEntryPoint : MonoBehaviour
     {
+        //TODO: REMOVE THIS FIELD AFTER ADDING META-MAP WITH LEVEL CHOICE
+        [SerializeField] private LevelConfig _levelConfig;
+
         private InitializingWeapons _weapons;
         private WeaponHolder _weaponHolder;
         private ObjectPool _objectPool;
-        private EnemiesController _enemiesController;
+        private LevelObserver _levelObserver;
+        private WaveCountPresenter _waveCountPresenter;
 
         [Inject]
         public void Construct(
@@ -17,12 +21,16 @@ namespace EndlessRoad
             , ObjectPool objectPool
             , WeaponHolder weaponHolder
             , EnemiesController enemiesController
+            , EventBus eventBus
+            , LevelObserver levelObserver
+            , WaveCountPresenter waveCountPresenter
             )
         {
             _weapons = weapons;
             _objectPool = objectPool;
             _weaponHolder = weaponHolder;
-            _enemiesController = enemiesController;
+            _levelObserver = levelObserver;
+            _waveCountPresenter = waveCountPresenter;
         }
 
         private IEnumerator Start()
@@ -34,7 +42,9 @@ namespace EndlessRoad
             }
             yield return null;
             _weaponHolder.InitializeWeapons();
-            _enemiesController.StartSpawnEnemies();
+            _levelObserver.InitializeLevel(_levelConfig.levelDifficult, _levelConfig.WaveCount);
+            _levelObserver.StartLevel();
+            _waveCountPresenter.SetWaveCount(_levelConfig.WaveCount);
         }
     }
 }

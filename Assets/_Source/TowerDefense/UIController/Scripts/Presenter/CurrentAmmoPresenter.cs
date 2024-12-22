@@ -6,9 +6,9 @@ namespace EndlessRoad
     public class CurrentAmmoPresenter : IInitializable, IDisposable
     {
         private readonly WeaponHolder _weaponHolder;
-        private readonly AmmoView _ammoView;
+        private readonly TextView _ammoView;
 
-        public CurrentAmmoPresenter(WeaponHolder weaponHolder, AmmoView ammoView)
+        public CurrentAmmoPresenter(WeaponHolder weaponHolder, TextView ammoView)
         {
             _weaponHolder = weaponHolder;
             _ammoView = ammoView;
@@ -25,6 +25,6 @@ namespace EndlessRoad
             _weaponHolder.CurrentAmmoInformer.CurrentAmmoChanged -= OnCurrentAmmoChanged;
         }
 
-        private void OnCurrentAmmoChanged(string currentAmmo) => _ammoView.AmmoChange(currentAmmo);
+        private void OnCurrentAmmoChanged(string currentAmmo) => _ammoView.TextChange(currentAmmo);
     }
 }
