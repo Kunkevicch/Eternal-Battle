@@ -2894,6 +2894,7 @@ MonoBehaviour:
   _visiubleLayer:
     serializedVersion: 2
     m_Bits: 832
+  _reward: 25
   _weaponView: {fileID: 1102046669776511121}
 --- !u!114 &8045807539429215952
 MonoBehaviour:

@@ -6,9 +6,9 @@ namespace EndlessRoad
     public sealed class AmmoClipPresenter : IInitializable, IDisposable
     {
         private readonly WeaponHolder _weaponHolder;
-        private readonly AmmoView _ammoView;
+        private readonly TextView _ammoView;
 
-        public AmmoClipPresenter(WeaponHolder weaponHolder, AmmoView ammoView)
+        public AmmoClipPresenter(WeaponHolder weaponHolder, TextView ammoView)
         {
             _weaponHolder = weaponHolder;
             _ammoView = ammoView;
@@ -25,7 +25,7 @@ namespace EndlessRoad
             _weaponHolder.CurrentAmmoInformer.AmmoInClipChanged -= OnAmmoClipChanged;
         }
 
-        private void OnAmmoClipChanged(string ammoClip) => _ammoView.AmmoChange(ammoClip);
+        private void OnAmmoClipChanged(string ammoClip) => _ammoView.TextChange(ammoClip);
 
     }
 }

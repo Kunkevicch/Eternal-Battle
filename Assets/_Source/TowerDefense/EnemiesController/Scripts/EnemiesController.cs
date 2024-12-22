@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -16,8 +17,6 @@ namespace EndlessRoad
         private EventBus _eventBus;
         private ObjectPool _objectPool;
 
-        private bool _isNeedNextWave = true;
-
         [Inject]
         public void Construct(EventBus eventBus, ObjectPool objectPool)
         {
@@ -25,25 +24,27 @@ namespace EndlessRoad
             _objectPool = objectPool;
         }
 
-        public void StartSpawnEnemies()
-        {
-            StartCoroutine(SpawnEnemiesRoutine());
-        }
-
         private void OnEnable()
         {
             _eventBus.EnemyDied += OnEnemyDied;
+            _eventBus.NeededNextWave += OnNeededNextWave;
         }
 
         private void OnDisable()
         {
             _eventBus.EnemyDied -= OnEnemyDied;
+            _eventBus.NeededNextWave -= OnNeededNextWave;
         }
 
-        private IEnumerator SpawnEnemiesRoutine()
+        private void OnNeededNextWave(LevelDifficult levelDifficult)
+        {
+            StartCoroutine(SpawnEnemiesRoutine(levelDifficult));
+        }
+
+        private IEnumerator SpawnEnemiesRoutine(LevelDifficult levelDifficult)
         {
             yield return new WaitForSeconds(5f);
-            var currentWave = _waves.Waves[Random.Range(0, _waves.Waves.Count - 1)];
+            var currentWave = GetWaveByLevelDifficult(levelDifficult);
             int enemyId = 0;
             while (_activeEnemies.Count < currentWave.EnemiesCount)
             {
@@ -71,15 +72,21 @@ namespace EndlessRoad
             }
         }
 
-        private void OnEnemyDied(int id)
+        private Wave GetWaveByLevelDifficult(LevelDifficult levelDifficult)
+        {
+            var wavesByDifficult = _waves.Waves.Where(x => x.WaveDifficult == levelDifficult).ToList();
+            return wavesByDifficult[Random.Range(0, wavesByDifficult.Count)];
+        }
+
+        private void OnEnemyDied(EnemyBase enemy)
         {
             if (_activeEnemies.Count == 0)
                 return;
 
-            _activeEnemies.Remove(id);
+            _activeEnemies.Remove(enemy.ID);
             if (_activeEnemies.Count == 0)
             {
-                StartCoroutine(SpawnEnemiesRoutine());
+                _eventBus.RaiseWaveCleared();
             }
         }
     }

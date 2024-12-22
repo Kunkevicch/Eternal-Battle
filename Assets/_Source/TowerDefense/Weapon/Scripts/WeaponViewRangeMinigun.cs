@@ -19,6 +19,14 @@ namespace EndlessRoad
         private Coroutine _rotateRoutine;
         private Coroutine _stopRotateRoutine;
 
+        private void OnDisable()
+        {
+            _firingTime = 0f;
+            _isFiring = false;
+            _isSpinningUp = false;
+            _currentRotationSpeed = 0f;
+        }
+
         public override void Tick(bool wantsToAttack)
         {
             base.Tick(wantsToAttack);
@@ -35,6 +43,7 @@ namespace EndlessRoad
         {
             _firingTime = 0;
             _isFiring = false;
+
             if (_rotateRoutine != null)
             {
                 StopCoroutine(_rotateRoutine);
@@ -112,7 +121,7 @@ namespace EndlessRoad
         {
             while (_isFiring)
             {
-                _firingTime += Time.deltaTime;
+                _firingTime = Mathf.Clamp(_firingTime + Time.deltaTime, 0, _spinUpTime);
                 _currentRotationSpeed = Mathf.Lerp(_currentRotationSpeed, _maxRotationSpeed, (_firingTime / _spinUpTime));
                 _currentRotationAngle += _currentRotationSpeed * Time.deltaTime;
 
@@ -129,10 +138,11 @@ namespace EndlessRoad
 
         private IEnumerator StopBarrelRotateRoutine()
         {
-            float spinDownTimer = _firingTime;
-            while (_firingTime > 0)
+            float spinDownTime = _spinDownTime;
+            while (spinDownTime > 0)
             {
-                _currentRotationSpeed = Mathf.Lerp(_maxRotationSpeed, 0, 1 - (spinDownTimer / _firingTime));
+                _currentRotationSpeed = Mathf.Lerp(_currentRotationSpeed, 0, 1 - (spinDownTime / _spinDownTime));
+
                 _currentRotationAngle += _currentRotationSpeed * Time.deltaTime;
 
                 if (_currentRotationAngle >= 360f)
@@ -141,13 +151,14 @@ namespace EndlessRoad
                 }
 
                 _barrel.localEulerAngles = new Vector3(0, 0, _currentRotationAngle);
+                spinDownTime -= Time.deltaTime;
                 _firingTime -= Time.deltaTime;
-                spinDownTimer -= Time.deltaTime;
                 yield return null;
             }
 
             _currentRotationSpeed = 0f;
             _isSpinningUp = false;
+            _firingTime = 0;
         }
     }
 }

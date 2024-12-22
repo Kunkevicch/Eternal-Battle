@@ -9,6 +9,7 @@ namespace EndlessRoad
     {
         [SerializeField] protected WeaponConfig _weaponConfig;
         [SerializeField] private LayerMask _visiubleLayer;
+        [SerializeField] private int _reward;
         private int _id = -1;
 
         protected bool _canAttack = true;
@@ -24,7 +25,8 @@ namespace EndlessRoad
         {
             _eventBus = eventBus;
         }
-
+        public int ID => _id;
+        public int Reward => _reward;
         public bool CanAtack => _canAttack;
 
         public LayerMask VisiubleLayer => _visiubleLayer;
@@ -65,7 +67,7 @@ namespace EndlessRoad
         {
             _bodyCollider.enabled = false;
             _animator.PlayDead();
-            _eventBus.RaiseEnemyDied(_id);
+            _eventBus.RaiseEnemyDied(this);
             _id = -1;
             StartCoroutine(BodyDisablingRoutine());
         }
