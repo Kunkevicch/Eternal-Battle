@@ -7396,7 +7396,7 @@ MonoBehaviour:
           m_Value0: 2444444267347962508
           m_Value1: 14285745333338682678
         Name: AttackDistance
-        m_Value: 4
+        m_Value: 3
 --- !u!136 &4584077553333970627
 CapsuleCollider:
   m_ObjectHideFlags: 0

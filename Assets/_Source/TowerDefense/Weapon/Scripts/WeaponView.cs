@@ -97,7 +97,8 @@ namespace EndlessRoad
 
         public Vector3 GetForwardDirection() =>
             _isPlayerWeapon ? Camera.main.transform.forward
-            + Camera.main.transform.TransformDirection(new Vector3(0, -transform.rotation.x, 0))
+            //- transform.rotation.x
+            + Camera.main.transform.TransformDirection(new Vector3(0, 0, 0))
             : _muzzleParticle.transform.forward;
 
         public float GetCurrentSpread() =>

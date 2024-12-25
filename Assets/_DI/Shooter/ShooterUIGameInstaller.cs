@@ -9,6 +9,8 @@ namespace EndlessRoad
         [SerializeField] private TextView _currentAmmoView;
         [SerializeField] private TextView _waveCountView;
         [SerializeField] private TextView _rewardView;
+        [SerializeField] private ProgressFlowView _playerHealthView;
+        [SerializeField] private Health _playerHealth;
 
         [SerializeField] private CrossHairView _crossHairView;
 
@@ -41,6 +43,11 @@ namespace EndlessRoad
             Container.BindInterfacesAndSelfTo<RewardPresenter>()
                 .AsSingle()
                 .WithArguments(_rewardView)
+                .NonLazy();
+
+            Container.BindInterfacesAndSelfTo<PlayerHealthPresenter>()
+                .AsSingle()
+                .WithArguments(_playerHealth, _playerHealthView)
                 .NonLazy();
         }
     }
