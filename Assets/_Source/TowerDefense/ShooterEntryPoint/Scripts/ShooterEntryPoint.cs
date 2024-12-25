@@ -12,7 +12,7 @@ namespace EndlessRoad
         private InitializingWeapons _weapons;
         private WeaponHolder _weaponHolder;
         private ObjectPool _objectPool;
-        private LevelObserver _levelObserver;
+        private GameObserver _levelObserver;
         private WaveCountPresenter _waveCountPresenter;
 
         [Inject]
@@ -22,7 +22,7 @@ namespace EndlessRoad
             , WeaponHolder weaponHolder
             , EnemiesController enemiesController
             , EventBus eventBus
-            , LevelObserver levelObserver
+            , GameObserver levelObserver
             , WaveCountPresenter waveCountPresenter
             )
         {

@@ -43,13 +43,13 @@ namespace EndlessRoad
             _agent.enabled = true;
         }
 
-        public override void Revive()
+        public override void Activate()
         {
             _berserkRage.Revive();
             _canAttack = true;
             _health.SetMinimalHealth(1);
             _rageEyes.SetActive(false);
-            base.Revive();
+            base.Activate();
         }
 
         public float MoveSpeed => _moveSpeed;

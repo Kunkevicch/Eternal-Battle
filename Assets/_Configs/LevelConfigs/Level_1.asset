@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ddb3fb2002bde640875d2ab0009dfd6, type: 3}
   m_Name: Level_1
   m_EditorClassIdentifier: 
-  levelDifficult: 1
+  levelDifficult: 0
   WaveCount: 25

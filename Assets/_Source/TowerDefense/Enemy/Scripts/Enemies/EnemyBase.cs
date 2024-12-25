@@ -47,13 +47,31 @@ namespace EndlessRoad
 
         public void SetID(int id) => _id = id;
         public void SetPlayer(GameObject player) => _agent.SetVariableValue("Player", player);
-        public virtual void Revive()
+
+        public virtual void Activate()
         {
+            _agent.enabled = true;
             _health.Revive();
             _animator.Revive();
             _bodyCollider.enabled = true;
             _agent.BlackboardReference.SetVariableValue("CurrentState", State.Idle);
             _agent.Restart();
+        }
+
+        public void Deactivate()
+        {
+            if (!IsDead)
+            {
+                _agent.BlackboardReference.SetVariableValue("CurrentState", State.Idle);
+            }
+            _agent.enabled = false;
+        }
+
+        public void Clear()
+        {
+            _id = -1;
+            IsDead = false;
+            gameObject.SetActive(false);
         }
 
         public void StartMove() => _animator.PlayMove();

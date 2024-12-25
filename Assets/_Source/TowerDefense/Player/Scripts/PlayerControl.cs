@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace EndlessRoad.Shooter
     {
         [SerializeField] private float _jumpHeight;
         [SerializeField] private float _moveSpeed;
+        [SerializeField] private float _immortalityTimeAfterReviving;
         [SerializeField] private CinemachineCamera _camera;
 
         private WeaponHolder _weaponHolder;
@@ -16,17 +18,21 @@ namespace EndlessRoad.Shooter
         private bool _isAim;
         private bool _isShooting;
         private bool _isGrounded;
+        private bool _isInjured;
 
         private CharacterController _controller;
+        private Health _health;
         private PlayerInput _playerInput;
         private Vector3 _playerVelocity;
 
         private ObjectPool _test; // TODO: Перенести обжект пул либо в gamecontroller, либо 
+        private EventBus _eventBus;
 
         [Inject]
-        public void Construct(ObjectPool objectPool)
+        public void Construct(ObjectPool objectPool, EventBus eventBus)
         {
             _test = objectPool;
+            _eventBus = eventBus;
         }
 
         private Vector2 MoveDirection => _playerInput.Player.Move.ReadValue<Vector2>();
@@ -38,9 +44,10 @@ namespace EndlessRoad.Shooter
             _test.Initialize();
             _controller = GetComponent<CharacterController>();
             _weaponHolder = GetComponentInChildren<WeaponHolder>();
+            _health = GetComponent<Health>();
             _playerInput = new();
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void OnEnable()
@@ -60,6 +67,11 @@ namespace EndlessRoad.Shooter
             _playerInput.Player.ChangeWeapon.started += OnChangeWeapon;
 
             _playerInput.Player.Reload.started += ctx => _weaponHolder.Reload();
+
+            _health.HealthChanged += OnHealthChanged;
+            _health.Dead += OnDead;
+
+            _eventBus.SecondChance += OnSecondChance;
         }
 
         private void OnDisable()
@@ -79,6 +91,11 @@ namespace EndlessRoad.Shooter
             _playerInput.Player.ChangeWeapon.started -= OnChangeWeapon;
 
             _playerInput.Player.Reload.started -= ctx => _weaponHolder.Reload();
+
+            _health.HealthChanged -= OnHealthChanged;
+            _health.Dead -= OnDead;
+
+            _eventBus.SecondChance -= OnSecondChance;
         }
 
         private void Update()
@@ -185,5 +202,36 @@ namespace EndlessRoad.Shooter
                 }
             }
         }
+
+        private void OnDead()
+        {
+            _camera.Lens.FieldOfView = 60f;
+            _playerInput.Player.Disable();
+        }
+
+        private void OnSecondChance()
+        {
+            _playerInput.Player.Enable();
+            _health.Revive();
+            _health.StartImmortality(_immortalityTimeAfterReviving);
+        }
+
+        // Игроку наносится урон, после которого у него остается <25% хп
+        //  ->Выводить vfx получения критического урона
+        //  ->При восстановлении хп выше 25% показывать VFX хила
+        private void OnHealthChanged(int newHealth)
+        {
+            if ((float)_health.CurrentHealth / _health.MaxHealth < 0.25f)
+            {
+                _isInjured = true;
+                _eventBus.RaisePlayerInjured();
+            }
+            else if (_isInjured)
+            {
+                _isInjured = false;
+                _eventBus.RaisePlayerRestored();
+            }
+        }
+
     }
 }

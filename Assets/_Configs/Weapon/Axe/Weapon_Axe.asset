@@ -16,7 +16,7 @@ MonoBehaviour:
   WeaponViewPrefab: {fileID: 455615326751575433, guid: 1054dea2fa9aaa744888bbb5f1e80aa9, type: 3}
   ReloadTime: 0
   Name: Axe
-  Damage: 100
+  Damage: 10
   ProjectileCount: 0
   SpawnPoint: {x: 0, y: 0, z: 0}
   SpawnRotation: {x: 0, y: 0, z: 0}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,12 +7,14 @@ using Zenject;
 
 namespace EndlessRoad
 {
+
     public class EnemiesController : MonoBehaviour
     {
         [SerializeField] private EnemyWaveConfig _waves;
         [SerializeField] private Transform _spawnPoint;
         [SerializeField] private GameObject _player;
 
+        private Health _playerHealth;
         private Dictionary<int, EnemyBase> _activeEnemies = new();
 
         private EventBus _eventBus;
@@ -24,20 +27,43 @@ namespace EndlessRoad
             _objectPool = objectPool;
         }
 
+        private void Awake()
+        {
+            _playerHealth = _player.GetComponent<Health>();
+        }
+
         private void OnEnable()
         {
             _eventBus.EnemyDied += OnEnemyDied;
             _eventBus.NeededNextWave += OnNeededNextWave;
+            _eventBus.ActivateEnemy += OnActivateEnemy;
+            _eventBus.GameOver += OnGameOver;
+            _eventBus.SecondChance += OnActivateEnemy;
         }
 
         private void OnDisable()
         {
             _eventBus.EnemyDied -= OnEnemyDied;
             _eventBus.NeededNextWave -= OnNeededNextWave;
+            _eventBus.ActivateEnemy -= OnActivateEnemy;
+            _eventBus.GameOver -= OnGameOver;
+            _eventBus.SecondChance -= OnActivateEnemy;
+        }
+
+        private void OnGameOver()
+        {
+            if (_activeEnemies.Count > 0)
+            {
+                foreach (var enemy in _activeEnemies)
+                {
+                    enemy.Value.Deactivate();
+                }
+            }
         }
 
         private void OnNeededNextWave(LevelDifficult levelDifficult)
         {
+            ClearWave();
             StartCoroutine(SpawnEnemiesRoutine(levelDifficult));
         }
 
@@ -63,19 +89,34 @@ namespace EndlessRoad
                         enemy.SetPlayer(_player);
                         enemy.gameObject.SetActive(true);
                         enemy.Initialize();
-                        enemy.Revive();
+                        enemy.Deactivate();
                         enemyId++;
                         yield return null;
                     }
                 }
                 yield return null;
             }
+            _eventBus.RaiseWaveReady();
         }
+
+        private void ClearWave()
+        {
+            if (_activeEnemies.Count == 0)
+                return;
+
+            foreach (var enemy in _activeEnemies)
+            {
+                enemy.Value.Clear();
+            }
+
+            _activeEnemies.Clear();
+        }
+
 
         private Wave GetWaveByLevelDifficult(LevelDifficult levelDifficult)
         {
             var wavesByDifficult = _waves.Waves.Where(x => x.WaveDifficult == levelDifficult).ToList();
-            return wavesByDifficult[Random.Range(0, wavesByDifficult.Count)];
+            return wavesByDifficult[UnityEngine.Random.Range(0, wavesByDifficult.Count)];
         }
 
         private void OnEnemyDied(EnemyBase enemy)
@@ -89,5 +130,21 @@ namespace EndlessRoad
                 _eventBus.RaiseWaveCleared();
             }
         }
+
+        private void OnActivateEnemy()
+        {
+            if (_activeEnemies.Count > 0)
+            {
+                foreach (var enemy in _activeEnemies)
+                {
+                    enemy.Value.Activate();
+                }
+            }
+            else
+            {
+                _eventBus.RaiseWaveCleared();
+            }
+        }
+
     }
 }

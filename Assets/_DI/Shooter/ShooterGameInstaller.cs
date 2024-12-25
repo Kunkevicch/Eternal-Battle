@@ -1,4 +1,5 @@
 using EndlessRoad;
+using EndlessRoad.Shooter;
 using UnityEngine;
 using Zenject;
 
@@ -6,6 +7,7 @@ public class ShooterGameInstaller : MonoInstaller
 {
     [SerializeField] private ObjectForPooling _poolingObjects;
     [SerializeField] private InitializingWeapons _initializingWeapons;
+    [SerializeField] private PlayerControl _player;
 
     public override void InstallBindings()
     {
@@ -37,8 +39,9 @@ public class ShooterGameInstaller : MonoInstaller
             .AsSingle()
             .NonLazy();
 
-        Container.BindInterfacesAndSelfTo<LevelObserver>()
+        Container.BindInterfacesAndSelfTo<GameObserver>()
             .AsSingle()
+            .WithArguments(_player)
             .Lazy();
     }
 }
