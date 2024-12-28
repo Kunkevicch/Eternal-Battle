@@ -1,13 +1,12 @@
 using EndlessRoad;
-using EndlessRoad.Shooter;
 using UnityEngine;
 using Zenject;
 
 public class ShooterGameInstaller : MonoInstaller
 {
+    //TODO: перенести иницилазилацию в старт игры
     [SerializeField] private ObjectForPooling _poolingObjects;
     [SerializeField] private InitializingWeapons _initializingWeapons;
-    [SerializeField] private PlayerControl _player;
 
     public override void InstallBindings()
     {
@@ -41,7 +40,6 @@ public class ShooterGameInstaller : MonoInstaller
 
         Container.BindInterfacesAndSelfTo<GameObserver>()
             .AsSingle()
-            .WithArguments(_player)
             .Lazy();
     }
 }

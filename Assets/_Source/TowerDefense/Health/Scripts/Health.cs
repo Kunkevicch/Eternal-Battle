@@ -13,6 +13,7 @@ namespace EndlessRoad
         private bool _isImmortal;
         private int _minimalHealth;
 
+        private Coroutine _immortalCoroutine;
         private void Awake()
         {
             _currentHealth = _maxHealth;
@@ -28,7 +29,10 @@ namespace EndlessRoad
             get => _currentHealth;
             set
             {
-                if (_currentHealth == value || _isImmortal)
+                if (value < _currentHealth && _isImmortal)
+                    return;
+
+                if (_currentHealth == value)
                     return;
 
                 _currentHealth = Mathf.Clamp(value, _minimalHealth, MaxHealth);
@@ -41,6 +45,7 @@ namespace EndlessRoad
                 }
             }
         }
+        public float CurrentHealthPercent => (float)_currentHealth / _maxHealth;
 
         public void ApplyDamage(int damage)
         {
@@ -53,8 +58,15 @@ namespace EndlessRoad
 
         public void SetMinimalHealth(int newMinimalHealth) => _minimalHealth = Mathf.Clamp(newMinimalHealth, 0, _maxHealth);
 
-        public void StartImmortality(float duration) => StartCoroutine(ImmortalityRoutine(duration));
-
+        public void StartImmortality(float duration)
+        {
+            if (_immortalCoroutine != null)
+            {
+                StopCoroutine(_immortalCoroutine);
+                _immortalCoroutine = null;
+            }
+            _immortalCoroutine = StartCoroutine(ImmortalityRoutine(duration));
+        }
         private IEnumerator ImmortalityRoutine(float duration)
         {
             _isImmortal = true;

@@ -29,8 +29,8 @@ namespace EndlessRoad
         private void OnEnable()
         {
             _weaponHolder.WeaponShooted += OnWeaponShooted;
-            _eventBus.GameOver -= OnGameOver;
-            _eventBus.SecondChance -= OnGameRestarted;
+            _eventBus.GameOver += OnGameOver;
+            _eventBus.SecondChance += OnGameRestarted;
         }
 
         private void OnDisable()

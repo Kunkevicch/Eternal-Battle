@@ -402,6 +402,18 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23641303531718370, guid: a2458a3a2318bb64ea864a87f6558170, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
+    - target: {fileID: 23651080472567072, guid: a2458a3a2318bb64ea864a87f6558170, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
+    - target: {fileID: 23936371116652476, guid: a2458a3a2318bb64ea864a87f6558170, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
     m_RemovedComponents:
     - {fileID: 64094202111403934, guid: a2458a3a2318bb64ea864a87f6558170, type: 3}
     m_RemovedGameObjects: []

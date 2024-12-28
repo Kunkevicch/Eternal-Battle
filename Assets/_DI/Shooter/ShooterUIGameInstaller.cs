@@ -5,14 +5,19 @@ namespace EndlessRoad
 {
     public class ShooterUIGameInstaller : MonoInstaller
     {
+        [SerializeField] private PlayerConfigShooter _playerConfigShooter;
+
         [SerializeField] private TextView _ammoInClipView;
         [SerializeField] private TextView _currentAmmoView;
         [SerializeField] private TextView _waveCountView;
         [SerializeField] private TextView _rewardView;
-        [SerializeField] private ProgressFlowView _playerHealthView;
-        [SerializeField] private Health _playerHealth;
 
+        [SerializeField] private ProgressFlowView _playerHealthProgressView;
+        [SerializeField] private TextView _playerHealthTextView;
+
+        [SerializeField] private Health _playerHealth;
         [SerializeField] private CrossHairView _crossHairView;
+        [SerializeField] private ProgressFlowView _survivalTimerView;
 
         public override void InstallBindings()
         {
@@ -47,7 +52,12 @@ namespace EndlessRoad
 
             Container.BindInterfacesAndSelfTo<PlayerHealthPresenter>()
                 .AsSingle()
-                .WithArguments(_playerHealth, _playerHealthView)
+                .WithArguments(_playerHealth, _playerHealthProgressView, _playerHealthTextView)
+                .NonLazy();
+
+            Container.BindInterfacesAndSelfTo<SurvivalTimerPresenter>()
+                .AsSingle()
+                .WithArguments(_survivalTimerView, _playerConfigShooter)
                 .NonLazy();
         }
     }

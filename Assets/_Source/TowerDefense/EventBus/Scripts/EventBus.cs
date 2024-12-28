@@ -4,6 +4,7 @@ namespace EndlessRoad
 {
     public class EventBus
     {
+        //TODO: Переделать это всё на нормальный EventBus!!!!
         public event Action<EnemyBase> EnemyDied;
         public event Action LevelCompleted;
         public event Action WaveCleared;
@@ -13,8 +14,11 @@ namespace EndlessRoad
         public event Action GameOver;
         public event Action GiveUp;
         public event Action SecondChance;
+        public event Action PlayerTakeDown;
+        public event Action PlayerDead;
         public event Action PlayerInjured;
         public event Action PlayerRestored;
+        public event Action PlayerHitted;
 
         public void RaiseEnemyDied(EnemyBase enemy) => EnemyDied?.Invoke(enemy);
         public void RaiseLevelCompleted() => LevelCompleted?.Invoke();
@@ -25,7 +29,10 @@ namespace EndlessRoad
         public void RaiseGameOver() => GameOver?.Invoke();
         public void RaiseGiveUp() => GiveUp?.Invoke();
         public void RaiseSecondChance() => SecondChance?.Invoke();
+        public void RaisePlayerTakeDown() => PlayerTakeDown?.Invoke();
+        public void RaisePlayerDead() => PlayerDead?.Invoke();
         public void RaisePlayerInjured() => PlayerInjured?.Invoke();
         public void RaisePlayerRestored() => PlayerRestored?.Invoke();
+        public void RaisePlayerHitted() => PlayerHitted?.Invoke();
     }
 }
