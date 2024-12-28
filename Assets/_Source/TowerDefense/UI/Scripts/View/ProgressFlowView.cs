@@ -1,6 +1,5 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.UI;
 
 namespace EndlessRoad
@@ -9,46 +8,27 @@ namespace EndlessRoad
     {
         [SerializeField] private Image _progressBorder;
         [SerializeField] private Image _progressFill;
-        [SerializeField] private TextMeshProUGUI _progressText;
         [SerializeField] private float _progressChangeTime;
 
-        private Coroutine _changeRoutine;
+        Tween _animation;
 
         public void SetProgress(float newProgress)
         {
-            StartChangeProgressRoutine(newProgress);
+            _animation = _progressFill.DOFillAmount(newProgress * _progressBorder.fillAmount, _progressChangeTime).Play();
         }
 
-        private void StartChangeProgressRoutine(float newProgress)
+        public void SetProgress(float newProgress, float changeTime)
         {
-            if (_changeRoutine != null)
-            {
-                StopCoroutine(_changeRoutine);
-                _changeRoutine = null;
-            }
-            _changeRoutine = StartCoroutine(ChangeProgressRoutine(newProgress));
+            _animation = _progressFill.DOFillAmount(newProgress, changeTime).Play();
         }
 
-        private IEnumerator ChangeProgressRoutine(float newProgress)
+        public void ResetProgress()
         {
-            float startTime = Time.time;
-            float startProgress = _progressFill.fillAmount;
-            float endTime = startTime + _progressChangeTime;
-
-            while (Time.time < endTime)
+            if (!_animation.IsComplete())
             {
-                float elapsedTime = Time.time - startTime;
-                float t = elapsedTime / _progressChangeTime;
-                float updatedProgress = Mathf.Lerp(startProgress, newProgress, t);
-                _progressFill.fillAmount = updatedProgress;
-                int newProgressTextValue = Mathf.CeilToInt(updatedProgress * 100);
-                _progressText.text = newProgressTextValue.ToString() + "%";
-                yield return null;
+                _animation.Complete();
             }
-
-            _progressFill.fillAmount = newProgress;
-            int finalProgressTextValue = Mathf.CeilToInt(newProgress * 100);
-            _progressText.text = finalProgressTextValue.ToString() + "%";
+            _progressFill.DOFillAmount(1, 0).Play();
         }
     }
 }

@@ -16,7 +16,7 @@ MonoBehaviour:
   WeaponViewPrefab: {fileID: 5279165922973478711, guid: 09fae5197dbc1b94ba94a3c7d7363f93, type: 3}
   ReloadTime: 2
   Name: Minigun
-  Damage: 25
+  Damage: 2
   ProjectileCount: 0
   SpawnPoint: {x: 0.4, y: -0.4, z: -0.2}
   SpawnRotation: {x: 0, y: 0, z: 0}

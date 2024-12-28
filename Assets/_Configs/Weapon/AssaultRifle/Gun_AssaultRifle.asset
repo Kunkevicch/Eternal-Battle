@@ -16,8 +16,8 @@ MonoBehaviour:
   WeaponViewPrefab: {fileID: 1853060936267108395, guid: 0928ce5118160c344b27448f00bc3c3d, type: 3}
   ReloadTime: 0.5
   Name: Assault
-  Damage: 0
-  ProjectileCount: 0
+  Damage: 15
+  ProjectileCount: 1
   SpawnPoint: {x: 0.25, y: -0.25, z: 0.4}
   SpawnRotation: {x: 0, y: 0, z: 0}
   AimPoint: {x: 0, y: -0.165, z: 0.29}

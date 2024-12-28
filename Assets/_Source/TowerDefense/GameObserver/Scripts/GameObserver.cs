@@ -1,4 +1,3 @@
-using EndlessRoad.Shooter;
 using System;
 using UnityEngine;
 using Zenject;
@@ -9,18 +8,14 @@ namespace EndlessRoad
     {
         // TODO: swap to player
         // TODO: CHANGE EVENTBUS, MAKE HIM MORE FLEXIBLE AND EXPANDABLE
-        private readonly PlayerControl _player;
-        private readonly Health _playerHealth;
         private readonly EventBus _eventBus;
 
         private LevelDifficult _levelDifficult;
         private int _waveCount;
         private int _livesCount;
 
-        public GameObserver(PlayerControl playerControl, EventBus bus)
+        public GameObserver(EventBus bus)
         {
-            _player = playerControl;
-            _playerHealth = _player.GetComponent<Health>();
             _eventBus = bus;
         }
 
@@ -37,7 +32,7 @@ namespace EndlessRoad
         {
             _eventBus.WaveCleared += OnWaveCleared;
             _eventBus.WaveReady += OnWaveReady;
-            _playerHealth.Dead += OnPlayerDead;
+            _eventBus.PlayerDead += OnPlayerDead;
             _eventBus.SecondChance += OnSecondChance;
         }
 
@@ -45,7 +40,7 @@ namespace EndlessRoad
         {
             _eventBus.WaveCleared -= OnWaveCleared;
             _eventBus.WaveReady -= OnWaveReady;
-            _playerHealth.Dead -= OnPlayerDead;
+            _eventBus.PlayerDead -= OnPlayerDead;
             _eventBus.SecondChance -= OnSecondChance;
         }
 

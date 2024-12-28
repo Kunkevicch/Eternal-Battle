@@ -30,7 +30,6 @@ RectTransform:
   m_Children:
   - {fileID: 3172659278150920026}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -67,7 +66,6 @@ RectTransform:
   m_Children:
   - {fileID: 5268378134801697605}
   m_Father: {fileID: 5019048328217467860}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -99,6 +97,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2691134587362257893, guid: eafbd5aa8b19f3a49bd165a8d0d31273, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2691134587362257893, guid: eafbd5aa8b19f3a49bd165a8d0d31273, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -109,6 +111,10 @@ PrefabInstance:
     - target: {fileID: 2882445530360635198, guid: eafbd5aa8b19f3a49bd165a8d0d31273, type: 3}
       propertyPath: m_Name
       value: HUD_XPLog_Item
+      objectReference: {fileID: 0}
+    - target: {fileID: 3172917978551050553, guid: eafbd5aa8b19f3a49bd165a8d0d31273, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8704052855385624798, guid: eafbd5aa8b19f3a49bd165a8d0d31273, type: 3}
       propertyPath: m_Pivot.x

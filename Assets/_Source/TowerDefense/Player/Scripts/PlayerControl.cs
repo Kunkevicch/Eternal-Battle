@@ -1,18 +1,23 @@
-using System;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
+using DG.Tweening;
 
 namespace EndlessRoad.Shooter
 {
     public class PlayerControl : MonoBehaviour
     {
+        [SerializeField] private Transform _headTransform;
         [SerializeField] private float _jumpHeight;
         [SerializeField] private float _moveSpeed;
-        [SerializeField] private float _immortalityTimeAfterReviving;
+        [SerializeField] private float _immortalityDurationAfterReviving;
+        [SerializeField] private float _secondChanceDuration;
         [SerializeField] private CinemachineCamera _camera;
 
+        private int CachedHealth;
+
+        private PlayerTakeDown _secondChance;
         private WeaponHolder _weaponHolder;
 
         private bool _isAim;
@@ -46,8 +51,9 @@ namespace EndlessRoad.Shooter
             _weaponHolder = GetComponentInChildren<WeaponHolder>();
             _health = GetComponent<Health>();
             _playerInput = new();
-            //Cursor.visible = false;
-            //Cursor.lockState = CursorLockMode.Locked;
+            _secondChance = new(this, _eventBus, _secondChanceDuration);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void OnEnable()
@@ -72,11 +78,15 @@ namespace EndlessRoad.Shooter
             _health.Dead += OnDead;
 
             _eventBus.SecondChance += OnSecondChance;
+
+            _secondChance.Enable();
         }
 
         private void OnDisable()
         {
             _playerInput.Disable();
+
+            _secondChance.Disable();
 
             _playerInput.Player.Move.started -= ctx => _weaponHolder.ActiveWeapon.SetShootMove(true);
             _playerInput.Player.Move.canceled -= ctx => _weaponHolder.ActiveWeapon.SetShootMove(false);
@@ -96,6 +106,8 @@ namespace EndlessRoad.Shooter
             _health.Dead -= OnDead;
 
             _eventBus.SecondChance -= OnSecondChance;
+
+
         }
 
         private void Update()
@@ -205,15 +217,65 @@ namespace EndlessRoad.Shooter
 
         private void OnDead()
         {
-            _camera.Lens.FieldOfView = 60f;
-            _playerInput.Player.Disable();
+            if (_secondChance.TryStartTakeDownRoutine(OnEnemyKilled))
+            {
+                _eventBus.RaisePlayerTakeDown();
+                _playerInput.Player.Move.Disable();
+                _playerInput.Player.Jump.Disable();
+
+                _headTransform
+                    .DOLocalMoveY(-0.5f, 0.5f)
+                    .SetEase(Ease.InBounce)
+                    .Play();
+
+                _health.StartImmortality(_secondChanceDuration);
+                // vfx and etc
+            }
+            else
+            {
+                _headTransform
+                    .DOLocalMoveY(-0.5f, 0.5f)
+                    .SetEase(Ease.InBounce)
+                    .OnComplete(() =>
+                    {
+                        Cursor.visible = true;
+                        Cursor.lockState = CursorLockMode.None;
+                        _weaponHolder.Aim(false);
+                        _camera.Lens.FieldOfView = 60f;
+                        _playerInput.Player.Disable();
+                        _eventBus.RaisePlayerDead();
+                    })
+                    .Play();
+            }
+        }
+
+        private void OnEnemyKilled()
+        {
+            _health.Revive();
+            _health.StartImmortality(_immortalityDurationAfterReviving);
+
+            _playerInput.Player.Move.Enable();
+            _playerInput.Player.Jump.Enable();
+
+            _headTransform
+                .DOLocalMoveY(0.5f, 0.5f)
+                .SetEase(Ease.InBounce)
+                .Play();
         }
 
         private void OnSecondChance()
         {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
+            _headTransform
+                .DOLocalMoveY(0.5f, 0.5f)
+                .SetEase(Ease.InBounce)
+                .Play();
+
             _playerInput.Player.Enable();
             _health.Revive();
-            _health.StartImmortality(_immortalityTimeAfterReviving);
+            _health.StartImmortality(_immortalityDurationAfterReviving);
         }
 
         // Игроку наносится урон, после которого у него остается <25% хп
@@ -221,7 +283,14 @@ namespace EndlessRoad.Shooter
         //  ->При восстановлении хп выше 25% показывать VFX хила
         private void OnHealthChanged(int newHealth)
         {
-            if ((float)_health.CurrentHealth / _health.MaxHealth < 0.25f)
+            if (CachedHealth > newHealth)
+            {
+                _eventBus.RaisePlayerHitted();
+            }
+
+            CachedHealth = newHealth;
+
+            if (_health.CurrentHealthPercent < 0.25f)
             {
                 _isInjured = true;
                 _eventBus.RaisePlayerInjured();

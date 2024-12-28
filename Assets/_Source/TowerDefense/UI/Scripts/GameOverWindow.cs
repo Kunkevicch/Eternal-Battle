@@ -26,7 +26,6 @@ namespace EndlessRoad
         private void Awake()
         {
             _restartGameBtn = _restartGameBtnGO.GetComponent<Button>();
-            Debug.Log(_gameObserver.LivesCount);
         }
 
         private void OnEnable()

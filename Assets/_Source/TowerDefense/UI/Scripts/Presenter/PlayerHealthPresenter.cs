@@ -8,16 +8,18 @@ namespace EndlessRoad
     {
         private readonly Health _playerHealth;
         private readonly ProgressFlowView _playerHealthView;
+        private readonly TextView _playerHealthText;
 
         private int _maxHealth;
         private int _currentHealth;
 
-        public PlayerHealthPresenter(Health playerHealth, ProgressFlowView playerHealthView)
+        public PlayerHealthPresenter(Health playerHealth, ProgressFlowView playerHealthView, TextView playerHealthText)
         {
             _playerHealth = playerHealth;
             _maxHealth = _playerHealth.MaxHealth;
             _currentHealth = _playerHealth.CurrentHealth;
             _playerHealthView = playerHealthView;
+            _playerHealthText = playerHealthText;
         }
 
         public void Initialize()
@@ -32,7 +34,8 @@ namespace EndlessRoad
         private void OnHealthChanged(int newHealth)
         {
             _currentHealth = newHealth;
-            _playerHealthView.SetProgress((float)_currentHealth / _maxHealth);
+            _playerHealthView.SetProgress(_playerHealth.CurrentHealthPercent);
+            _playerHealthText.TextChange(Mathf.CeilToInt(_playerHealth.CurrentHealthPercent * 100).ToString() + "%");
         }
 
     }

@@ -682,18 +682,34 @@ PrefabInstance:
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23063054116765112, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
     - target: {fileID: 23204743877139118, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23204743877139118, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
     - target: {fileID: 23447517504632946, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23447517504632946, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
     - target: {fileID: 23463033177598412, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23463033177598412, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
     - target: {fileID: 23550007457329506, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
       propertyPath: m_CastShadows
       value: 0
@@ -702,10 +718,18 @@ PrefabInstance:
       propertyPath: m_DynamicOccludee
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23550007457329506, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
     - target: {fileID: 23875157421364124, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23875157421364124, guid: adc01ffa88b3d6744a5eb21a731f6c23, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 085f001d17cc84f4bb287915709c9dc1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
