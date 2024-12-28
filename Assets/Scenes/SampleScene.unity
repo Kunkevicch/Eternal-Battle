@@ -4470,16 +4470,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d32d1c0c8f9988418da802be7d66760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerConfigShooter: {fileID: 0}
+  _playerConfigShooter: {fileID: 11400000, guid: 22a62d57f8c3c0147a99b0b9f5648629, type: 2}
   _ammoInClipView: {fileID: 946958789}
   _currentAmmoView: {fileID: 43050407}
   _waveCountView: {fileID: 1832234669}
   _rewardView: {fileID: 1853510891}
   _playerHealthProgressView: {fileID: 2034700610}
-  _playerHealthTextView: {fileID: 2034700611}
+  _playerHealthTextView: {fileID: 2034700613}
   _playerHealth: {fileID: 1633797350}
   _crossHairView: {fileID: 2019732645}
-  _survivalTimerView: {fileID: 0}
+  _survivalTimerView: {fileID: 6212845974090393216}
 --- !u!1 &1765008309
 GameObject:
   m_ObjectHideFlags: 0
@@ -5843,7 +5843,7 @@ PrefabInstance:
       addedObject: {fileID: 2034700610}
     - targetCorrespondingSourceObject: {fileID: 2276080319036011048, guid: bed200afe5f10544a87d2bedbbf05569, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2034700611}
+      addedObject: {fileID: 2034700613}
   m_SourcePrefab: {fileID: 100100000, guid: bed200afe5f10544a87d2bedbbf05569, type: 3}
 --- !u!224 &2034700607 stripped
 RectTransform:
@@ -5881,7 +5881,7 @@ MonoBehaviour:
   _progressBorder: {fileID: 1458831138}
   _progressFill: {fileID: 2034700608}
   _progressChangeTime: 0.2
---- !u!114 &2034700611
+--- !u!114 &2034700613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
