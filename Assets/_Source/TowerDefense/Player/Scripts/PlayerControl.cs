@@ -270,7 +270,8 @@ namespace EndlessRoad.Shooter
 
             _headTransform
                 .DOLocalMoveY(0.5f, 0.5f)
-                .SetEase(Ease.InBounce);
+                .SetEase(Ease.InBounce)
+                .Play();
 
             _playerInput.Player.Enable();
             _health.Revive();

@@ -4470,13 +4470,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d32d1c0c8f9988418da802be7d66760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerConfigShooter: {fileID: 0}
   _ammoInClipView: {fileID: 946958789}
   _currentAmmoView: {fileID: 43050407}
   _waveCountView: {fileID: 1832234669}
   _rewardView: {fileID: 1853510891}
-  _playerHealthView: {fileID: 2034700610}
+  _playerHealthProgressView: {fileID: 2034700610}
+  _playerHealthTextView: {fileID: 2034700611}
   _playerHealth: {fileID: 1633797350}
   _crossHairView: {fileID: 2019732645}
+  _survivalTimerView: {fileID: 0}
 --- !u!1 &1765008309
 GameObject:
   m_ObjectHideFlags: 0
@@ -5838,6 +5841,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2276080319036011048, guid: bed200afe5f10544a87d2bedbbf05569, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2034700610}
+    - targetCorrespondingSourceObject: {fileID: 2276080319036011048, guid: bed200afe5f10544a87d2bedbbf05569, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2034700611}
   m_SourcePrefab: {fileID: 100100000, guid: bed200afe5f10544a87d2bedbbf05569, type: 3}
 --- !u!224 &2034700607 stripped
 RectTransform:
@@ -5874,8 +5880,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _progressBorder: {fileID: 1458831138}
   _progressFill: {fileID: 2034700608}
-  _progressText: {fileID: 1938523778}
   _progressChangeTime: 0.2
+--- !u!114 &2034700611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034700609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5efa04b9be0a38a4b82e000cf99d8f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _text: {fileID: 1938523778}
 --- !u!1 &2065715987
 GameObject:
   m_ObjectHideFlags: 0
@@ -6252,7 +6270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6212845974090393215
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6287,10 +6305,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c173c7673eacad24e83c0eaa8a857121, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _progressBorder: {fileID: 0}
-  _progressFill: {fileID: 0}
-  _progressText: {fileID: 0}
-  _progressChangeTime: 0.2
+  _progressBorder: {fileID: 1731038686}
+  _progressFill: {fileID: 1067985154}
+  _progressChangeTime: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
