@@ -2096,7 +2096,7 @@ MonoBehaviour:
   _weaponConfig: {fileID: 11400000, guid: 8126e79631c62c94491a109cb8758b25, type: 2}
   _visiubleLayer:
     serializedVersion: 2
-    m_Bits: 832
+    m_Bits: 9024
   _reward: 100
   _weaponView: {fileID: 2076614485615087837}
 --- !u!114 &3527219230811642287
