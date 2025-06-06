@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76052b261f5edb94ab24bc14250a68a9, type: 3}
+  m_Name: Gun_SniperRiffleW
+  m_EditorClassIdentifier: 
+  Type: 0
+  WeaponViewPrefab: {fileID: 8245205796510842976, guid: 5f02b7e95e467934eb47096f511afbab, type: 3}
+  ReloadTime: 1
+  Name: Sniper Riffle W
+  Damage: 150
+  ProjectileCount: 0
+  SpawnPoint: {x: 0.25, y: -0.2, z: 0.25}
+  SpawnRotation: {x: 0, y: 0, z: 0}
+  AimPoint: {x: 0, y: -0.113, z: 0}
+  AimRotation: {x: 0, y: 0, z: 0}
+  AnimatorController: {fileID: 22100000, guid: 33950915533f0944581e8212c2cb96a8, type: 2}
+  ShootConfiguration: {fileID: 11400000, guid: 4bfa647ccc5ce9940a3d261c046648e8, type: 2}
+  TrailConfiguration: {fileID: 11400000, guid: ea3fc3d1e5ce2d745a5af7328c451ab6, type: 2}
+  WeaponAudioConfig: {fileID: 11400000, guid: 9866c456e67aa3b459db1125d0917791, type: 2}
+  WeaponAmmoConfig: {fileID: 11400000, guid: e0f2f6e95fad9e74f8cbe35c7b259990, type: 2}

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ProjectDiva
+namespace EndlessRoad
 {
     [Serializable]
     public struct Pool

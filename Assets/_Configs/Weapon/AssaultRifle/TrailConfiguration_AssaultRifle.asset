@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa5e95c4f063ae4499f3d835505c7bc, type: 3}
+  m_Name: TrailConfiguration_AssaultRifle
+  m_EditorClassIdentifier: 
+  shootTrail: {fileID: -2866040665023010456, guid: 51b1097e73ee32f4fa405bc684eed3be, type: 3}
+  Duration: 0.02
+  MissDistance: 50
+  SimulationSpeed: 400

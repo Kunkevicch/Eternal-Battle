@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76052b261f5edb94ab24bc14250a68a9, type: 3}
+  m_Name: Gun_AssaultRifle
+  m_EditorClassIdentifier: 
+  Type: 0
+  WeaponViewPrefab: {fileID: 1853060936267108395, guid: 0928ce5118160c344b27448f00bc3c3d, type: 3}
+  ReloadTime: 0.5
+  Name: Assault
+  Damage: 15
+  ProjectileCount: 1
+  SpawnPoint: {x: 0.25, y: -0.25, z: 0.4}
+  SpawnRotation: {x: 0, y: 0, z: 0}
+  AimPoint: {x: 0, y: -0.165, z: 0.29}
+  AimRotation: {x: 0, y: 0, z: 0}
+  AnimatorController: {fileID: 22100000, guid: 33950915533f0944581e8212c2cb96a8, type: 2}
+  ShootConfiguration: {fileID: 11400000, guid: 9dcb325941f86824897c6e08df010ca9, type: 2}
+  TrailConfiguration: {fileID: 11400000, guid: 57754432169a5f34b954970420817cc7, type: 2}
+  WeaponAudioConfig: {fileID: 11400000, guid: 5d8db43fe013e85459e93d5f5d02be72, type: 2}
+  WeaponAmmoConfig: {fileID: 11400000, guid: ec55e83cdc13c6342a97a9be1089a03c, type: 2}

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76052b261f5edb94ab24bc14250a68a9, type: 3}
+  m_Name: Weapon_EmptyHand
+  m_EditorClassIdentifier: 
+  Type: 0
+  WeaponViewPrefab: {fileID: 455615326751575433, guid: 2a765be52c5b121488c3e36a1724d89f, type: 3}
+  ReloadTime: 0
+  Name: Hand
+  Damage: 25
+  ProjectileCount: 0
+  SpawnPoint: {x: 0, y: 0, z: 0}
+  SpawnRotation: {x: 0, y: 0, z: 0}
+  AimPoint: {x: 0, y: 0, z: 0}
+  AimRotation: {x: 0, y: 0, z: 0}
+  AnimatorController: {fileID: 0}
+  ShootConfiguration: {fileID: 11400000, guid: f850faa57e71e094d8d337ed17622ef4, type: 2}
+  TrailConfiguration: {fileID: 11400000, guid: d6d6385147b27264593d0208af45b8a3, type: 2}
+  WeaponAudioConfig: {fileID: 0}
+  WeaponAmmoConfig: {fileID: 0}
