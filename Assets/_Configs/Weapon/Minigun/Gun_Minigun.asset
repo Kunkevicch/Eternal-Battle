@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76052b261f5edb94ab24bc14250a68a9, type: 3}
+  m_Name: Gun_Minigun
+  m_EditorClassIdentifier: 
+  WeaponIcon: {fileID: 21300000, guid: 978c5549102988c4389e87c28e6d6a54, type: 3}
+  Type: 0
+  WeaponViewPrefab: {fileID: 5279165922973478711, guid: 09fae5197dbc1b94ba94a3c7d7363f93, type: 3}
+  ReloadTime: 2
+  Name: Minigun
+  Damage: 2
+  ProjectileCount: 0
+  SpawnPoint: {x: 0.4, y: -0.4, z: -0.2}
+  SpawnRotation: {x: 0, y: 0, z: 0}
+  AimPoint: {x: 0, y: 0, z: 0}
+  AimRotation: {x: 0, y: 0, z: 0}
+  AnimatorController: {fileID: 22100000, guid: 33950915533f0944581e8212c2cb96a8, type: 2}
+  ShootConfiguration: {fileID: 11400000, guid: 24121935e5bdf9146a08b1632f829be1, type: 2}
+  TrailConfiguration: {fileID: 11400000, guid: 25c89d17059f9df46818f72372fc7607, type: 2}
+  WeaponAudioConfig: {fileID: 11400000, guid: e44298655c584134a9f5e276e59c4766, type: 2}
+  WeaponAmmoConfig: {fileID: 11400000, guid: 0fdad510202c7dd49a94aad02b6ec9ab, type: 2}
