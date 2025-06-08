@@ -30,23 +30,20 @@ namespace EndlessRoad.Shooter
         private PlayerInput _playerInput;
         private Vector3 _playerVelocity;
 
-        private ObjectPool _test; // TODO: Перенести обжект пул либо в gamecontroller, либо 
         private EventBus _eventBus;
 
         [Inject]
-        public void Construct(ObjectPool objectPool, EventBus eventBus)
+        public void Construct(EventBus eventBus)
         {
-            _test = objectPool;
             _eventBus = eventBus;
         }
 
         private Vector2 MoveDirection => _playerInput.Player.Move.ReadValue<Vector2>();
-        private Vector2 lookDirection => _playerInput.Player.Rotation.ReadValue<Vector2>();
+        private Vector2 LookDirection => _playerInput.Player.Rotation.ReadValue<Vector2>();
         private WeaponView ActiveWeapon => _weaponHolder.ActiveWeapon;
 
         private void Awake()
         {
-            _test.Initialize();
             _controller = GetComponent<CharacterController>();
             _weaponHolder = GetComponentInChildren<WeaponHolder>();
             _health = GetComponent<Health>();
@@ -106,14 +103,12 @@ namespace EndlessRoad.Shooter
             _health.Dead -= OnDead;
 
             _eventBus.SecondChance -= OnSecondChance;
-
-
         }
 
         private void Update()
         {
             _weaponHolder.transform.rotation = _camera.transform.rotation;
-            _weaponHolder.Sway(lookDirection.x, lookDirection.y);
+            _weaponHolder.Sway(LookDirection.x, LookDirection.y);
         }
 
         private void FixedUpdate()
@@ -126,7 +121,7 @@ namespace EndlessRoad.Shooter
         {
             Vector3 move = _camera.transform.forward * input.y + _camera.transform.right * input.x;
             move.y = 0f;
-            _controller.Move(move * _moveSpeed * Time.fixedDeltaTime);
+            _controller.Move(_moveSpeed * Time.fixedDeltaTime * move);
             _playerVelocity.y += Physics.gravity.y * 2f * Time.fixedDeltaTime;
 
             if (_isGrounded && _playerVelocity.y < 0)
