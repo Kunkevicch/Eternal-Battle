@@ -26,52 +26,52 @@ namespace EndlessRoad
 
         private ObjectPool _objectPool;
 
-        public void SetObjectPool(ObjectPool objectPool)
-        {
-            if (_objectPool != null)
-                return;
+        //public void SetObjectPool(ObjectPool objectPool)
+        //{
+        //    if (_objectPool != null)
+        //        return;
 
-            _objectPool = objectPool;
-        }
+        //    _objectPool = objectPool;
+        //}
 
-        public WeaponView Spawn(Transform parent)
-        {
-            WeaponView weaponView = Instantiate(WeaponViewPrefab.gameObject).GetComponent<WeaponView>();
-            weaponView.transform.SetParent(parent, false);
-            ShootRaycastStrategyBase shootStrategy = GetShootStrategyByWeaponType();
-            weaponView.Initialize(
-                ShootConfiguration.ImpactMask
-                , this
-                , shootStrategy
-                );
+        //public WeaponView Spawn(Transform parent)
+        //{
+        //    WeaponView weaponView = Instantiate(WeaponViewPrefab.gameObject).GetComponent<WeaponView>();
+        //    weaponView.transform.SetParent(parent, false);
+        //    ShootRaycastStrategyBase shootStrategy = GetShootStrategyByWeaponType();
+        //    weaponView.Initialize(
+        //        ShootConfiguration.ImpactMask
+        //        , this
+        //        , shootStrategy
+        //        );
 
-            return weaponView;
-        }
+        //    return weaponView;
+        //}
 
-        public WeaponView InitializeWeapon(WeaponView weapon)
-        {
-            ShootRaycastStrategyBase shootStrategy = GetShootStrategyByWeaponType();
-            weapon.Initialize(
-                ShootConfiguration.ImpactMask
-                , this
-                , shootStrategy
-                );
+        //public WeaponView InitializeWeapon(WeaponView weapon)
+        //{
+        //    ShootRaycastStrategyBase shootStrategy = GetShootStrategyByWeaponType();
+        //    weapon.Initialize(
+        //        ShootConfiguration.ImpactMask
+        //        , this
+        //        , shootStrategy
+        //        );
 
-            return weapon;
-        }
+        //    return weapon;
+        //}
 
-        private ShootRaycastStrategyBase GetShootStrategyByWeaponType()
-        {
-            switch (Type)
-            {
-                case AttackType.SingleRaycast:
-                    return new ShootRaycastStrategySingle(_objectPool, TrailConfiguration.shootTrail);
+        //private ShootRaycastStrategyBase GetShootStrategyByWeaponType()
+        //{
+        //    switch (Type)
+        //    {
+        //        case AttackType.SingleRaycast:
+        //            return new ShootRaycastStrategySingle(_objectPool, TrailConfiguration.shootTrail);
 
-                case AttackType.MultipleRaycast:
-                    return new ShootRaycastStrategyMultiple(_objectPool, TrailConfiguration.shootTrail, ProjectileCount);
+        //        case AttackType.MultipleRaycast:
+        //            return new ShootRaycastStrategyMultiple(_objectPool, TrailConfiguration.shootTrail, ProjectileCount);
 
-                default: return new ShootRaycastStrategySingle(_objectPool, TrailConfiguration.shootTrail);
-            }
-        }
+        //        default: return new ShootRaycastStrategySingle(_objectPool, TrailConfiguration.shootTrail);
+        //    }
+        //}
     }
 }

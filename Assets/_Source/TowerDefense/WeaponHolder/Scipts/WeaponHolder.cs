@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace EndlessRoad
 {
@@ -11,8 +12,8 @@ namespace EndlessRoad
         [SerializeField] private Transform _animatorTransform;
         [SerializeField] private PlayerWeaponHolderConfig _weaponHolderConfig;
 
-        private List<WeaponView> _weapons = new();
-        private Dictionary<WeaponView, AnimatorOverrideController> _animators = new();
+        private readonly List<WeaponView> _weapons = new();
+        private readonly Dictionary<WeaponView, AnimatorOverrideController> _animators = new();
 
         private bool _isAim;
 
@@ -24,10 +25,21 @@ namespace EndlessRoad
         private WeaponView _activeWeapon;
 
         private CurrentAmmoInformer _currentAmmoInformer;
+        private IWeaponFactory _weaponFactory;
+
+        [Inject]
+        public void Construct(IWeaponFactory weaponFactory)
+        {
+            _weaponFactory = weaponFactory;
+        }
 
         public void InitializeWeapons()
         {
-            _weaponHolderConfig.SpawnWeaponInHolder(this);
+            foreach (var weapon in _weaponHolderConfig._weapons)
+            {
+                WeaponView spawnedWeapon = _weaponFactory.SpawnWeapon(weapon, transform);
+                AddWeapon(spawnedWeapon, weapon.AnimatorController);
+            }
         }
 
         private void Awake()
@@ -63,8 +75,9 @@ namespace EndlessRoad
                 _activeWeapon.WeaponReloaded += OnWeaponReloaded;
                 _activeWeapon.transform.SetParent(_animatorTransform);
                 _animator.SetAnimatorController(_animators[_activeWeapon]);
-                _handTransform.localPosition = _activeWeapon.SpawnPoint;
-                _handTransform.localRotation = Quaternion.Euler(_activeWeapon.SpawnRotation);
+                _handTransform
+                    .SetLocalPositionAndRotation(_activeWeapon.SpawnPoint
+                    , Quaternion.Euler(_activeWeapon.SpawnRotation));
                 UpdateAmmoInformation();
             }
 
@@ -98,7 +111,7 @@ namespace EndlessRoad
             {
                 if (activeWeaponIndex == 0)
                 {
-                    _activeWeapon = _weapons[_weapons.Count - 1];
+                    _activeWeapon = _weapons[^1];
                 }
                 else
                 {
@@ -113,8 +126,10 @@ namespace EndlessRoad
             _activeWeapon.gameObject.SetActive(true);
             _activeWeapon.WeaponReloaded += OnWeaponReloaded;
 
-            _handTransform.localPosition = _activeWeapon.SpawnPoint;
-            _handTransform.localRotation = Quaternion.Euler(_activeWeapon.SpawnRotation);
+            _handTransform
+                .SetLocalPositionAndRotation(
+                _activeWeapon.SpawnPoint,
+                Quaternion.Euler(_activeWeapon.SpawnRotation));
 
             _animator.SetAnimatorController(_animators[_activeWeapon]);
             _animator.PlayEquip();
@@ -125,7 +140,8 @@ namespace EndlessRoad
             _weaponRecoil.SetHand(_handTransform);
         }
 
-        public void Sway(float X, float Y) => _weaponSway.SwayProcess(X, Y);
+        public void Sway(float X, float Y)
+        => _weaponSway.SwayProcess(X, Y);
 
         public void Shoot(bool wantsToShoot)
         {
@@ -153,7 +169,6 @@ namespace EndlessRoad
                     }
                 }
             }
-
         }
 
         public void Reload()
@@ -164,7 +179,11 @@ namespace EndlessRoad
 
         public void Aim(bool aimStatus)
         {
-            _activeWeapon?.SetAimPosition(aimStatus);
+            if (_activeWeapon != null)
+            {
+                _activeWeapon.SetAimPosition(aimStatus);
+            }
+
             SetAimPosition(aimStatus);
             if (aimStatus)
             {

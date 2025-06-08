@@ -5,7 +5,7 @@ using Zenject;
 
 namespace EndlessRoad
 {
-    public class ObjectPool
+    public class ObjectPool : IInitializable
     {
         private Pool[] _poolArray = null;
 
@@ -98,8 +98,7 @@ namespace EndlessRoad
 
         private void ResetObject(Vector3 position, Quaternion rotation, Component componentToReuse, GameObject prefab)
         {
-            componentToReuse.transform.position = position;
-            componentToReuse.transform.rotation = rotation;
+            componentToReuse.transform.SetPositionAndRotation(position, rotation);
             componentToReuse.gameObject.transform.localScale = prefab.transform.localScale;
         }
     }

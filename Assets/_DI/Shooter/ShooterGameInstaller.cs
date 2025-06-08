@@ -10,36 +10,47 @@ public class ShooterGameInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.BindInterfacesAndSelfTo<ObjectPool>()
+        Container
+            .BindInterfacesAndSelfTo<ObjectPool>()
             .AsSingle()
             .WithArguments(_poolingObjects.Pool)
             .NonLazy();
 
-        Container.BindInterfacesAndSelfTo<ImpactService>()
+        Container
+            .BindInterfacesAndSelfTo<ImpactService>()
             .AsSingle()
             .NonLazy();
 
-        Container.BindInterfacesAndSelfTo<EventBus>()
+        Container
+            .BindInterfacesAndSelfTo<EventBus>()
             .AsSingle()
             .NonLazy();
 
-        Container.BindInterfacesAndSelfTo<WeaponHolder>()
+        Container
+            .BindInterfacesAndSelfTo<WeaponHolder>()
             .FromComponentInHierarchy()
             .AsSingle()
             .NonLazy();
 
-        Container.BindInterfacesAndSelfTo<EnemiesController>()
+        Container
+            .BindInterfacesAndSelfTo<EnemiesController>()
             .FromComponentInHierarchy()
             .AsSingle()
             .NonLazy();
 
-        Container.BindInterfacesAndSelfTo<InitializingWeapons>()
+        Container
+            .BindInterfacesAndSelfTo<InitializingWeapons>()
             .FromScriptableObject(_initializingWeapons)
             .AsSingle()
             .NonLazy();
 
-        Container.BindInterfacesAndSelfTo<GameObserver>()
+        Container
+            .BindInterfacesAndSelfTo<GameObserver>()
             .AsSingle()
             .Lazy();
+
+        Container
+            .BindInterfacesAndSelfTo<WeaponFactory>()
+            .AsSingle();
     }
 }
