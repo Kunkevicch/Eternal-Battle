@@ -7,7 +7,6 @@ Dive into a scorching post-apocalyptic arena! This intense **first-person shoote
 ### Core Features:
 - 🔫 **High-Octane FPS Combat**: Fast-paced gunplay with reactive movement
 - 🎲 **Roguelite Elements**: Permadeath with persistent progression between runs
-- 🗺️ **Procedural Arenas**: Unique, randomized battle zones every attempt
 - 🌪️ **Mad Max Atmosphere**: Desert ruins, sandstorms, and makeshift weaponry
 - 🌊 **Wave Survival**: Test your skills against escalating enemy hordes
 
@@ -23,7 +22,6 @@ Dive into a scorching post-apocalyptic arena! This intense **first-person shoote
 ### Основные особенности:
 - 🔫 **Динамичный FPS-геймплей**: Быстрые перестрелки и манёвренность
 - 🎲 **Элементы roguelite**: Перманентная смерть с прогрессом между попытками
-- 🗺️ **Случайные арены**: Уникальные генерируемые зоны боя
 - 🌪️ **Атмосфера Mad Max**: Пустынные руины, песчаные бури, самодельное оружие
 - 🌊 **Режим волн**: Сражайтесь с нарастающими ордами врагов
 
